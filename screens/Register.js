@@ -1,11 +1,10 @@
-import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Platform } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import Picker from '@react-native-picker/picker'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Platform } from 'react-native'
+import React, { useState, } from 'react'
 import { auth, firebase } from '../firebase'
 import { useNavigation } from '@react-navigation/core'
 import ArrowBack from '../components/arrowBack'
 import DateTimePicker from '@react-native-community/datetimepicker';
-import SelectList from 'react-native-dropdown-select-list';
+import { SelectList } from 'react-native-dropdown-select-list'
 
 const Register = () => {
     const [nome, setNome] = useState('')
@@ -44,7 +43,7 @@ const Register = () => {
             nome: nome,
             pontos: 0,
             dataNascimento: dataNascimento,
-            genero: 0/* genero */,
+            genero: genero,
         })
         auth
             .createUserWithEmailAndPassword(email, password)
@@ -59,6 +58,7 @@ const Register = () => {
     return (
         <View style={styles.main}>
             <ArrowBack />
+
             <View style={styles.container}>
                 
                 <Text style={styles.header}>Registo</Text>
@@ -101,6 +101,13 @@ const Register = () => {
                         onChange={onChange}
                         color={'#26972A'}
                         maximumDate={new Date()} />}
+                    <SelectList 
+                    data={listGender}
+                    setSelected={setGenero}
+                    placeholder="Indique o seu género"
+                    boxStyles={styles.input}
+                    dropdownStyles={styles.input}
+                    dropdownItemStyles={styles.dropdownItem}/>
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity

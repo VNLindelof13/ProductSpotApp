@@ -38,7 +38,7 @@ function AuthenticationStack()  {
         name="Menu" 
         options = {{headerShown:  false}}
         component={Menu} 
-        />
+        />      
       </Stack.Navigator>
   )
 }
