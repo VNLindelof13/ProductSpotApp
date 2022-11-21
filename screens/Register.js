@@ -14,6 +14,8 @@ const Register = () => {
     const [genero, setGenero] = useState('')
     const [dataNascimento, setDataNascimento] = useState(new Date())
     const [show, setShow] = useState(false)
+    const [selected, setSelected] = useState(false)
+    const [fDate, setFDate] = useState('')
     const listGender = [
         { key: '1', value: 'Masculino' },
         { key: '2', value: 'Feminino' },
@@ -27,9 +29,11 @@ const Register = () => {
 
 
     const onChange = (event, selectedDate) => {
+        setSelected(true)
         const currentDate = selectedDate;
         setShow(Platform.OS === 'ios');
         setDataNascimento(currentDate)
+        setFDate( dataNascimento.getDay() + '/' + dataNascimento.getMonth() + '/' + dataNascimento.getFullYear())
     }
 
     const showMode = () => {
@@ -61,7 +65,7 @@ const Register = () => {
 
             <View style={styles.container}>
                 
-                <Text style={styles.header}>Registo</Text>
+                <Text style={styles.header}>Criar Conta</Text>
                 <View style={styles.inputContainers}>
                     <TextInput
                         placeholder="Nome"
@@ -91,8 +95,8 @@ const Register = () => {
                     ></TextInput>
                     <TouchableOpacity
                         onPress={showMode}
-                        style={[styles.button, styles.datePicker]}>
-                        <Text style={styles.buttonText}> Data de Nascimento </Text>
+                        style={[styles.input]}>
+                        {selected ? <Text style={[styles.dateTextSet]}> {fDate}  </Text> : <Text style={[styles.dateText]}> Data de Nascimento </Text> }
                     </TouchableOpacity>
                     {show && <DateTimePicker
                         style={styles.datePicker}
@@ -105,7 +109,8 @@ const Register = () => {
                     data={listGender}
                     setSelected={setGenero}
                     placeholder="Indique o seu género"
-                    boxStyles={styles.input}
+                    boxStyles={styles.inputBox}
+                    boxTextStyles= {styles.inputBoxText}
                     dropdownStyles={styles.input}
                     dropdownItemStyles={styles.dropdownItem}/>
                 </View>
@@ -156,6 +161,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginTop: 5,
     },
+    inputBox: {
+        backgroundColor: 'white',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderRadius: 10,
+        borderColor: 'white',        
+        marginTop: 5,
+    },
+   
 
     buttonContainer: {
         width: "60%",
@@ -185,7 +199,17 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 16,
     },
-
+    dateText: {
+        color: '#a0a0a0',
+        fontSize: 13,
+        marginLeft:-3,
+    },
+    dateTextSet: {
+        color: '#black',
+        fontSize: 13,
+        marginLeft:-3,
+    },
+    
 
     registerTextClick: {
         color: '#26972A',
