@@ -1,20 +1,27 @@
 import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Platform } from 'react-native'
 import React, { useState, useEffect } from 'react'
+import Picker from '@react-native-picker/picker'
 import { auth, firebase } from '../firebase'
 import { useNavigation } from '@react-navigation/core'
 import ArrowBack from '../components/arrowBack'
 import DateTimePicker from '@react-native-community/datetimepicker';
+import SelectList from 'react-native-dropdown-select-list';
+
 const Register = () => {
     const [nome, setNome] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [password2, setPassword2] = useState('')
     const [genero, setGenero] = useState('')
-    
     const [dataNascimento, setDataNascimento] = useState(new Date())
-    const [mode, setMode] = useState('date');
-    const [show,setShow] = useState(false)
-    const [text,setText] = useState ('Empty')
+    const [show, setShow] = useState(false)
+    const listGender = [
+        { key: '1', value: 'Masculino' },
+        { key: '2', value: 'Feminino' },
+        { key: '3', value: 'Outro' },
+        { key: '4', value: 'Prefiro não mencionar' },
+    ]
+
 
     const navigation = useNavigation()
     const db = firebase.firestore()
@@ -30,7 +37,7 @@ const Register = () => {
         setShow(true);
     }
 
-    
+
     const handleSignUp = () => {
         db.collection('users').add({
             id: email,
@@ -53,6 +60,7 @@ const Register = () => {
         <View style={styles.main}>
             <ArrowBack />
             <View style={styles.container}>
+                
                 <Text style={styles.header}>Registo</Text>
                 <View style={styles.inputContainers}>
                     <TextInput
@@ -83,16 +91,16 @@ const Register = () => {
                     ></TextInput>
                     <TouchableOpacity
                         onPress={showMode}
-                        style={[styles.button,styles.datePicker]}>
+                        style={[styles.button, styles.datePicker]}>
                         <Text style={styles.buttonText}> Data de Nascimento </Text>
                     </TouchableOpacity>
                     {show && <DateTimePicker
-                    style = {styles.datePicker}
-                        value = {dataNascimento}
-                        mode = {'date'}
-                        onChange = {onChange}
-                        color={'#26972A'} 
-                        maximumDate={new Date()}/>}
+                        style={styles.datePicker}
+                        value={dataNascimento}
+                        mode={'date'}
+                        onChange={onChange}
+                        color={'#26972A'}
+                        maximumDate={new Date()} />}
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
@@ -113,10 +121,10 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-    datePicker:{
-        marginTop:5,
+    datePicker: {
+        marginTop: 5,
     },
-    
+
 
     container: {
         marginTop: -15,
