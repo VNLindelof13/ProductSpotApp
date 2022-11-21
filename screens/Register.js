@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Platform } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { auth, firebase } from '../firebase'
 import { useNavigation } from '@react-navigation/core'
@@ -10,26 +10,33 @@ const Register = () => {
     const [password, setPassword] = useState('')
     const [password2, setPassword2] = useState('')
     const [genero, setGenero] = useState('')
+    
     const [dataNascimento, setDataNascimento] = useState(new Date())
+    const [mode, setMode] = useState('date');
     const [show,setShow] = useState(false)
+    const [text,setText] = useState ('Empty')
 
     const navigation = useNavigation()
     const db = firebase.firestore()
 
-    const showCalendar = () => {
-        setShow(true)
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate;
+        setShow(Platform.OS === 'ios');
+        setDataNascimento(currentDate)
     }
 
-    const changeDate = () => {
-        setShow(false)
-
+    const showMode = () => {
+        setShow(true);
     }
+
+    
     const handleSignUp = () => {
         db.collection('users').add({
             id: email,
             nome: nome,
             pontos: 0,
-            dataNascimento: 0/* dataNascimento */,
+            dataNascimento: dataNascimento,
             genero: 0/* genero */,
         })
         auth
@@ -75,15 +82,17 @@ const Register = () => {
                         secureTextEntry
                     ></TextInput>
                     <TouchableOpacity
-                        onPress={showCalendar}
-                        style={styles.button}>
-                        <Text style={styles.buttonText}> Mostrar Calendário </Text>
+                        onPress={showMode}
+                        style={[styles.button,styles.datePicker]}>
+                        <Text style={styles.buttonText}> Data de Nascimento </Text>
                     </TouchableOpacity>
                     {show && <DateTimePicker
-                    value = {dataNascimento}
-                    mode = {'date'}
-                    onChange = {changeDate}
-                    color={'#26972A'} />}
+                    style = {styles.datePicker}
+                        value = {dataNascimento}
+                        mode = {'date'}
+                        onChange = {onChange}
+                        color={'#26972A'} 
+                        maximumDate={new Date()}/>}
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
@@ -103,6 +112,11 @@ const styles = StyleSheet.create({
     main: {
         flex: 1,
     },
+
+    datePicker:{
+        marginTop:5,
+    },
+    
 
     container: {
         marginTop: -15,
