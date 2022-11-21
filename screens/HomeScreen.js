@@ -1,0 +1,181 @@
+import { FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { auth, firebase } from '../firebase'
+import { useNavigation } from '@react-navigation/native'
+import NavBar from '../components/NavBar'
+import { getFirestore, collection, onSnapshot, ore } from 'firebase/firestore'
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
+const HomeScreen = () => {
+  const [mapFocused, setMapFocused] = useState(true)
+  const navigation = useNavigation()
+  const handleClick = () => {
+    setMapFocused(!mapFocused)
+  }
+  const [marketList, setMarketList] = useState([])
+  const db = firebase.firestore().collection('market')
+  /* const handleSignOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        navigation.replace("Login")
+      })
+      .catch(error => alert(error.message))
+  } */
+
+  useEffect(() => {
+    const loadData = async () => {
+      db
+        .onSnapshot(
+          querySnapshot => {
+            const marketList = []
+            querySnapshot.forEach((doc) => {
+              const { name, location } = doc.data()
+              marketList.push({
+                id: doc.id,
+                name,
+                location,
+              })
+            })
+            setMarketList(marketList)
+          }
+        )
+    };
+    loadData();
+  }, [])
+
+  return (
+    <View style={styles.main}>
+      <NavBar isLogin = {false}/>
+      <View style={styles.selector}>
+        <TouchableOpacity
+          onPress={handleClick}
+          style={styles.buttonHeader}>
+          <Text style={[styles.selectorText, mapFocused && styles.mapOff]}>
+            Mapa
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleClick}
+          style={styles.buttonHeader}>
+          <Text style={[styles.selectorText, !mapFocused && styles.mapOff]}>
+            Lista
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.container}>
+        <View style={styles.searchBarContainer}>
+          <Icon
+            style={styles.searchIcon}
+            name='magnifier'
+            color='#000'
+            size={14} />
+          <TextInput
+            placeholder="Pesquisar supermercado..."
+            style={styles.searchBar} />
+        </View>
+        {mapFocused ?
+          (<View style={styles.placeholderText}><Text>Vista do Mapa</Text></View>)
+          :
+          (<View style = {styles.marketList}>
+            <FlatList
+              data={marketList}
+              renderItem={({ item }) => (
+                <View style={styles.itemContainer}>
+                  <Text> {item.name}</Text>
+                  <Text> {item.location}</Text>
+                </View>
+              )} />
+              
+            </View>)}
+      </View>
+    </View>
+  )
+}
+
+export default HomeScreen
+
+const styles = StyleSheet.create({
+  marketList:{
+    marginTop:5,
+    paddingBottom:40,
+  },
+  itemContainer:{
+    padding:10,
+    borderColor:'#A0A0A0',
+    borderWidth:1,
+    borderRadius:10,
+    width:'95%',
+    alignSelf:'center',
+    marginVertical:2,
+  },
+
+  placeholderText: {
+    alignSelf: 'center',
+    height:'95%',
+  },
+  searchIcon: {
+    padding: 6,
+    paddingLeft: 10,
+    position:'absolute',
+  },
+  searchBar: {
+    marginLeft:30,    
+  },
+  searchBarContainer: {
+    height:'7%',
+    justifyContent: 'center',
+    borderWidth:1,
+    borderColor: '#F0f0f0',
+   },
+
+
+  selector: {    
+    flexDirection: 'row',
+    alignContent: 'center',
+  },
+
+  buttonHeader: {
+    width: '50%',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#F0f0f0',
+    paddingVertical: 10,
+
+
+  },
+
+  selectorText: {
+    color: '#000',
+    fontWeight: '500',
+    fontSize:16,
+  },
+
+  main: {
+    flex: 1,
+    backgroundColor: '#FFF',
+  },
+
+  mapOff: {
+    color: '#26972A',
+    fontWeight: 'bold',
+  },
+  container: {
+    flex: 1,
+    height:10,
+
+  },
+
+  button: {
+    backgroundColor: '#26972A',
+    width: "60%",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: '700',
+    fontSize: 24,
+  },
+})
