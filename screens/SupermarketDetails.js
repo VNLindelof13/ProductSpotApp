@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const SupermarketDetails = (props) => {
+const supermarketInfo = props.route.params.item
   return (
     <View>
-      <Text>{props.name}</Text>
+      <Text>{supermarketInfo.name}</Text>
     </View>
   )
 }

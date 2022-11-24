@@ -5,17 +5,19 @@ import { useNavigation } from '@react-navigation/native'
 import NavBar from '../components/NavBar'
 import { getFirestore, collection, onSnapshot, ore } from 'firebase/firestore'
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import SupermarketDetails from './SupermarketDetails'
 const HomeScreen = () => {
   const [mapFocused, setMapFocused] = useState(true)
   const navigation = useNavigation()
   const [marketList, setMarketList] = useState([])
-  const [marketListFiltered, setMarketListFiltered] = useState([])
+  const [marketListFiltered, setMarketListFiltered] = useState(marketList)
   const db = firebase.firestore().collection('market')
  
   
   const handleClick = () => {
     setMapFocused(!mapFocused)
   }
+ 
 
   useEffect(() => {
     const loadData = async () => {
@@ -36,6 +38,7 @@ const HomeScreen = () => {
         )
     };
     loadData();
+    searchFilter();
   }, [])
 
   const searchFilter = (text) => {
@@ -91,10 +94,12 @@ const HomeScreen = () => {
             <FlatList
               data={marketListFiltered}
               renderItem={({ item }) => (
-                <View style={styles.itemContainer}>
+                <TouchableOpacity 
+                style={styles.itemContainer}
+                onPress={() => navigation.navigate('SupermarketDetails', {item})}>
                   <Text> {item.name}</Text>
                   <Text> {item.location}</Text>
-                </View>
+                </TouchableOpacity>
               )} />
               
             </View>)}

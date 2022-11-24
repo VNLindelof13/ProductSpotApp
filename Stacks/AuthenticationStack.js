@@ -6,6 +6,7 @@ import HomeScreen from '../screens/HomeScreen';
 import ForgotPassword from '../screens/ForgotPassword';
 import Register from '../screens/Register';
 import Menu from '../screens/Menu';
+import SupermarketDetails from '../screens/SupermarketDetails';
 
 const Stack = createNativeStackNavigator();
 function AuthenticationStack()  {
@@ -39,6 +40,11 @@ function AuthenticationStack()  {
         options = {{headerShown:  false}}
         component={Menu} 
         />      
+        <Stack.Screen 
+        options = {{headerShown:  false}} 
+        name="SupermarketDetails" 
+        component={SupermarketDetails} 
+        />
       </Stack.Navigator>
   )
 }
