@@ -8,19 +8,14 @@ import Icon from 'react-native-vector-icons/SimpleLineIcons';
 const HomeScreen = () => {
   const [mapFocused, setMapFocused] = useState(true)
   const navigation = useNavigation()
+  const [marketList, setMarketList] = useState([])
+  const [marketListFiltered, setMarketListFiltered] = useState([])
+  const db = firebase.firestore().collection('market')
+ 
+  
   const handleClick = () => {
     setMapFocused(!mapFocused)
   }
-  const [marketList, setMarketList] = useState([])
-  const db = firebase.firestore().collection('market')
-  /* const handleSignOut = () => {
-    auth
-      .signOut()
-      .then(() => {
-        navigation.replace("Login")
-      })
-      .catch(error => alert(error.message))
-  } */
 
   useEffect(() => {
     const loadData = async () => {
@@ -42,6 +37,21 @@ const HomeScreen = () => {
     };
     loadData();
   }, [])
+
+  const searchFilter = (text) => {
+    if (text) {
+      const newData = marketList.filter(item => {
+        const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase;
+        const textData = text.toUpperCase();
+        if (itemData.includes(textData)){
+          return itemData
+        }
+      })
+      setMarketListFiltered(newData);
+    } else {
+      setMarketListFiltered(marketList)
+    }
+  }
 
   return (
     <View style={styles.main}>
@@ -71,14 +81,15 @@ const HomeScreen = () => {
             size={14} />
           <TextInput
             placeholder="Pesquisar supermercado..."
-            style={styles.searchBar} />
+            style={styles.searchBar} 
+            onChangeText ={searchFilter}/>
         </View>
         {mapFocused ?
           (<View style={styles.placeholderText}><Text>Vista do Mapa</Text></View>)
           :
           (<View style = {styles.marketList}>
             <FlatList
-              data={marketList}
+              data={marketListFiltered}
               renderItem={({ item }) => (
                 <View style={styles.itemContainer}>
                   <Text> {item.name}</Text>
@@ -96,8 +107,8 @@ export default HomeScreen
 
 const styles = StyleSheet.create({
   marketList:{
+    flex:1,
     marginTop:5,
-    paddingBottom:40,
   },
   itemContainer:{
     padding:10,
@@ -161,8 +172,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    height:10,
-
   },
 
   button: {
