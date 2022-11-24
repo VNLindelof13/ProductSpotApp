@@ -1,11 +1,10 @@
-import { FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList,  StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { auth, firebase } from '../firebase'
+import { firebase } from '../firebase'
 import { useNavigation } from '@react-navigation/native'
 import NavBar from '../components/NavBar'
-import { getFirestore, collection, onSnapshot, ore } from 'firebase/firestore'
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import SupermarketDetails from './SupermarketDetails'
+
 const HomeScreen = () => {
   const [mapFocused, setMapFocused] = useState(true)
   const navigation = useNavigation()
