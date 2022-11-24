@@ -41,7 +41,8 @@ const LoginScreen = () => {
   }
   return (
   <View style = {styles.body}>
-    <NavBar isLogin/>
+    <NavBar 
+    showMenu ={false}/>
     <KeyboardAvoidingView
       style={styles.container}
       behavior="padding">

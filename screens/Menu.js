@@ -31,8 +31,8 @@ const Menu = () => {
     return (
         <View>
             <NavBar 
-            isLogin={true}
-            isMenu = {true} />
+            showMenu={true}
+            showBack={true} />
             <View style={styles.main}>
                 <Text style={styles.header}>Menu</Text>
                 <View style={styles.buttonContainer}>

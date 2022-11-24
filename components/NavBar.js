@@ -21,7 +21,7 @@ const NavBar = (props) => {
       <View style={styles.imageView}>
         <Image style={styles.imageContainer} source={require('./logo.png')} />
       </View>
-      {!props.isLogin && 
+      {props.showMenu && 
       <TouchableOpacity
       onPress={handleClick}>
         <Icon
@@ -30,7 +30,7 @@ const NavBar = (props) => {
           size={20}
           color={'#26972A'} />
       </TouchableOpacity>}
-      {props.isMenu && 
+      {props.showBack && 
       <TouchableOpacity
       onPress={handleBackClick}>
         <Icon2

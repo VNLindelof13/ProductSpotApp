@@ -12,12 +12,12 @@ const HomeScreen = () => {
   const [marketList, setMarketList] = useState([])
   const [marketListFiltered, setMarketListFiltered] = useState(marketList)
   const db = firebase.firestore().collection('market')
- 
-  
+
+
   const handleClick = () => {
     setMapFocused(!mapFocused)
   }
- 
+
 
   useEffect(() => {
     const loadData = async () => {
@@ -34,11 +34,11 @@ const HomeScreen = () => {
               })
             })
             setMarketList(marketList)
+            setMarketListFiltered(marketList)
           }
         )
     };
     loadData();
-    searchFilter();
   }, [])
 
   const searchFilter = (text) => {
@@ -46,7 +46,7 @@ const HomeScreen = () => {
       const newData = marketList.filter(item => {
         const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase;
         const textData = text.toUpperCase();
-        if (itemData.includes(textData)){
+        if (itemData.includes(textData)) {
           return itemData
         }
       })
@@ -58,7 +58,8 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.main}>
-      <NavBar isLogin = {false}/>
+      <NavBar 
+      showMenu={true} />
       <View style={styles.selector}>
         <TouchableOpacity
           onPress={handleClick}
@@ -84,25 +85,25 @@ const HomeScreen = () => {
             size={14} />
           <TextInput
             placeholder="Pesquisar supermercado..."
-            style={styles.searchBar} 
-            onChangeText ={searchFilter}/>
+            style={styles.searchBar}
+            onChangeText={searchFilter} />
         </View>
         {mapFocused ?
           (<View style={styles.placeholderText}><Text>Vista do Mapa</Text></View>)
           :
-          (<View style = {styles.marketList}>
+          (<View style={styles.marketList}>
             <FlatList
               data={marketListFiltered}
               renderItem={({ item }) => (
-                <TouchableOpacity 
-                style={styles.itemContainer}
-                onPress={() => navigation.navigate('SupermarketDetails', {item})}>
+                <TouchableOpacity
+                  style={styles.itemContainer}
+                  onPress={() => navigation.navigate('SupermarketDetails', { item })}>
                   <Text> {item.name}</Text>
                   <Text> {item.location}</Text>
                 </TouchableOpacity>
               )} />
-              
-            </View>)}
+
+          </View>)}
       </View>
     </View>
   )
@@ -111,41 +112,41 @@ const HomeScreen = () => {
 export default HomeScreen
 
 const styles = StyleSheet.create({
-  marketList:{
-    flex:1,
-    marginTop:5,
+  marketList: {
+    flex: 1,
+    marginTop: 5,
   },
-  itemContainer:{
-    padding:10,
-    borderColor:'#A0A0A0',
-    borderWidth:1,
-    borderRadius:10,
-    width:'95%',
-    alignSelf:'center',
-    marginVertical:2,
+  itemContainer: {
+    padding: 10,
+    borderColor: '#A0A0A0',
+    borderWidth: 1,
+    borderRadius: 10,
+    width: '95%',
+    alignSelf: 'center',
+    marginVertical: 2,
   },
 
   placeholderText: {
     alignSelf: 'center',
-    height:'95%',
+    height: '95%',
   },
   searchIcon: {
     padding: 6,
     paddingLeft: 10,
-    position:'absolute',
+    position: 'absolute',
   },
   searchBar: {
-    marginLeft:30,    
+    marginLeft: 30,
   },
   searchBarContainer: {
-    height:'7%',
+    height: '7%',
     justifyContent: 'center',
-    borderWidth:1,
+    borderWidth: 1,
     borderColor: '#F0f0f0',
-   },
+  },
 
 
-  selector: {    
+  selector: {
     flexDirection: 'row',
     alignContent: 'center',
   },
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
   selectorText: {
     color: '#000',
     fontWeight: '500',
-    fontSize:16,
+    fontSize: 16,
   },
 
   main: {
