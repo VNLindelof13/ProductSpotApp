@@ -22,12 +22,12 @@ const SupermarketDetails = (props) => {
                     return itemData
                 }
             })
-            setFilteredProductList(newData);
+            setFilteredProductList(newData.sort());
         } else {
             setFilteredProductList(productList)
         }
     }
-
+   
     useEffect(() => {
         const loadData = async () => {
             db
@@ -61,7 +61,6 @@ const SupermarketDetails = (props) => {
                 showBack={true}></NavBar>
             <View style={styles.container}>
                 <Text style={styles.name}>{supermarketInfo.name}</Text>
-
                 <View style={styles.searchBarContainer}>
                     <Icon
                         style={styles.searchIcon}

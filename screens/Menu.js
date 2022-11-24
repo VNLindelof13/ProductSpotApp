@@ -11,11 +11,11 @@ const Menu = () => {
     const navigation = useNavigation()
 
     const handlePersonalArea  = () => {
-        navigation.replace("Home")
+        
 
     }
     const handleMarketList  = () => {
-
+        navigation.popToTop()
     }
     const handleGammification  = () => {
 
@@ -43,7 +43,7 @@ const Menu = () => {
                     </TouchableOpacity>
                 </View><View style={styles.buttonContainer}>
                     <TouchableOpacity
-                        onPress={handlePersonalArea}
+                        onPress={handleMarketList}
                         style={styles.button}>
                         <Text style={styles.buttonText}> Supermercados </Text>
                     </TouchableOpacity>
