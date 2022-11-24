@@ -60,6 +60,8 @@ const SupermarketDetails = (props) => {
                 showMenu={true}
                 showBack={true}></NavBar>
             <View style={styles.container}>
+                <Text style={styles.name}>{supermarketInfo.name}</Text>
+
                 <View style={styles.searchBarContainer}>
                     <Icon
                         style={styles.searchIcon}
@@ -71,18 +73,24 @@ const SupermarketDetails = (props) => {
                         style={styles.searchBar}
                         onChangeText={searchFilter} />
                 </View>
-                <Text style={styles.name}>{supermarketInfo.name}</Text>
-                <FlatList
-                    data={filteredProductList}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            style={styles.itemContainer}
-                            onPress={() => navigation.navigate('ProductDetails', { item })}
-                       >
-                            <Text> {item.name}</Text>
-                            <Text> {item.location}</Text>
-                        </TouchableOpacity>
-                    )} />
+                <View style={styles.list}>
+                    <FlatList
+                        data={filteredProductList}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                style={styles.itemContainer}
+                                onPress={() => navigation.navigate('ProductDetails', { item })}
+                            >
+                                <Text> {item.name}</Text>
+                                <Text> {item.location}</Text>
+                            </TouchableOpacity>
+                        )} />
+                </View>
+                <TouchableOpacity
+                    style={styles.addProductButton}
+                    onPress={() => navigation.navigate('AddProduct')}>
+                        <Text style={styles.buttonText}>Adicionar Produto</Text>
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -93,16 +101,63 @@ export default SupermarketDetails
 const styles = StyleSheet.create({
     main: {
         flex: 1,
+        backgroundColor: 'white',
     },
 
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
 
-
     name: {
+        marginTop: 10,
+        fontSize: 30,
+        fontWeight: '500',
+        color: '#26972A',
         alignSelf: 'center',
+    },
+
+    searchIcon: {
+        marginLeft: 10,
+    },
+
+    searchBar: {
+        marginLeft: 10,
+    },
+
+    searchBarContainer: {
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+
+    list: {
+        flex: 3,
+    },
+
+    itemContainer: {
+        padding: 10,
+        borderColor: '#A0A0A0',
+        borderWidth: 1,
+        borderRadius: 10,
+        width: '95%',
+        alignSelf: 'center',
+        marginVertical: 2,
+    },
+
+    addProductButton: {
+        backgroundColor: '#26972A',
+        paddingVertical: 10,
+        marginVertical: 30,
+        borderRadius: 10,
+        alignItems: 'center',
+        alignSelf: 'center',
+        width: '50%',
+    },
+
+    buttonText: {
+        color: 'white',
+        fontWeight: '700',
+        fontSize: 16,
     },
 })

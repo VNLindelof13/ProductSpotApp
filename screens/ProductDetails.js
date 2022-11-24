@@ -21,6 +21,7 @@ export default ProductDetails
 
 const styles = StyleSheet.create({
     main: {
+        backgroundColor:'white',
         flex: 1,
     },
     container: {

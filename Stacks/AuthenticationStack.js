@@ -8,6 +8,7 @@ import Register from '../screens/Register';
 import Menu from '../screens/Menu';
 import SupermarketDetails from '../screens/SupermarketDetails';
 import ProductDetails from '../screens/ProductDetails';
+import AddProduct from '../screens/AddProduct';
 
 const Stack = createNativeStackNavigator();
 function AuthenticationStack()  {
@@ -50,6 +51,11 @@ function AuthenticationStack()  {
         options = {{headerShown:  false}} 
         name="ProductDetails" 
         component={ProductDetails} 
+        />
+        <Stack.Screen 
+        options = {{headerShown:  false}} 
+        name="AddProduct" 
+        component={AddProduct} 
         />
       </Stack.Navigator>
   )
