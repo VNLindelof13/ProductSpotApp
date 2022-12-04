@@ -25,11 +25,12 @@ const HomeScreen = () => {
           querySnapshot => {
             const marketList = []
             querySnapshot.forEach((doc) => {
-              const { name, location } = doc.data()
+              const { name, location, corridors } = doc.data()
               marketList.push({
                 id: doc.id,
                 name,
                 location,
+                corridors,
               })
             })
             setMarketList(marketList)
@@ -117,12 +118,12 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     padding: 10,
-    borderColor: '#A0A0A0',
+    borderColor: '#d0d0d0',
     borderWidth: 1,
     borderRadius: 10,
     width: '95%',
     alignSelf: 'center',
-    marginVertical: 2,
+    marginVertical: 4,
   },
 
   placeholderText: {

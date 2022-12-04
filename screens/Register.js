@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Platform } from 'r
 import React, { useState, } from 'react'
 import { auth, firebase } from '../firebase'
 import { useNavigation } from '@react-navigation/core'
-import ArrowBack from '../components/arrowBack'
+import NavBar from '../components/NavBar'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { SelectList } from 'react-native-dropdown-select-list'
 
@@ -61,7 +61,9 @@ const Register = () => {
 
     return (
         <View style={styles.main}>
-            <ArrowBack />
+            <NavBar 
+            showMenu={false}
+            showBack={true} />
 
             <View style={styles.container}>
                 

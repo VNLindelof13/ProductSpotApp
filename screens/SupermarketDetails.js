@@ -35,14 +35,15 @@ const SupermarketDetails = (props) => {
                     querySnapshot => {
                         const productListAux = []
                         querySnapshot.forEach((doc) => {
-                            const { name, location, supermarketID, isValidated } = doc.data()
+                            const { name, location, supermarketID, rating, usersValidated } = doc.data()
                             if (supermarketInfo.id === supermarketID) {
                                 productListAux.push({
                                     id: doc.id,
                                     name,
                                     location,
                                     supermarketID,
-                                    isValidated,
+                                    rating,
+                                    usersValidated
                                 })
                             }
                         })
@@ -59,8 +60,8 @@ const SupermarketDetails = (props) => {
             <NavBar
                 showMenu={true}
                 showBack={true}></NavBar>
+            <Text style={styles.name}>{supermarketInfo.name}</Text>
             <View style={styles.container}>
-                <Text style={styles.name}>{supermarketInfo.name}</Text>
                 <View style={styles.searchBarContainer}>
                     <Icon
                         style={styles.searchIcon}
@@ -87,7 +88,7 @@ const SupermarketDetails = (props) => {
                 </View>
                 <TouchableOpacity
                     style={styles.addProductButton}
-                    onPress={() => navigation.navigate('AddProduct')}>
+                    onPress={() => navigation.navigate('AddProduct', {supermarketInfo})}>
                         <Text style={styles.buttonText}>Adicionar Produto</Text>
                 </TouchableOpacity>
             </View>
@@ -136,12 +137,12 @@ const styles = StyleSheet.create({
 
     itemContainer: {
         padding: 10,
-        borderColor: '#A0A0A0',
+        borderColor: '#d0d0d0',
         borderWidth: 1,
         borderRadius: 10,
         width: '95%',
         alignSelf: 'center',
-        marginVertical: 2,
+        marginVertical: 4,
     },
 
     addProductButton: {
