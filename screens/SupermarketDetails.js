@@ -47,6 +47,11 @@ const SupermarketDetails = (props) => {
                                 })
                             }
                         })
+                        productListAux.sort(function(a,b){
+                            if(a.rating>b.rating) return -1;
+                            if (a.rating<b.rating) return 1;
+                            if (a.rating=b.rating) return 0;
+                        })
                         setProductList(productListAux)
                         setFilteredProductList(productListAux)
                     }
@@ -82,7 +87,7 @@ const SupermarketDetails = (props) => {
                                 onPress={() => navigation.navigate('ProductDetails', { item })}
                             >
                                 <Text> {item.name}</Text>
-                                <Text> {item.location}</Text>
+                                <Text> Corredor {item.location}</Text>
                             </TouchableOpacity>
                         )} />
                 </View>

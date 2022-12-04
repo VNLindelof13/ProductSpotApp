@@ -9,7 +9,7 @@ const ProductDetails = (props) => {
     const productInfo = props.route.params.item
     const db = firebase.firestore().collection('products')
     const [hasValidated, setHasValidated] = useState(props.route.params.item.usersValidated.includes(firebase.auth().currentUser.email))
-
+    const isNegative = productInfo.rating < 0
     const addValidation = (a) => {
         db.doc(productInfo.id).update({ usersValidated: firebase.firestore.FieldValue.arrayUnion(firebase.auth().currentUser.email) })
         db.doc(productInfo.id).update({ rating: productInfo.rating + a })
@@ -38,6 +38,7 @@ const ProductDetails = (props) => {
                 showBack={true}
                 showMenu={true} />
             <View style={styles.container}>
+                {isNegative && <Text>Pela informação que temos, o produto pode não se encontrar neste local!</Text>}
                 {!hasValidated && <TouchableOpacity
                     style={styles.buttonContainer}
                     onPress={verifyAlert}>

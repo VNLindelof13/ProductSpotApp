@@ -47,15 +47,10 @@ const AddProduct = (props) => {
                     onChangeText={setName}
                     placeholder="Nome do Produto"
                 />
-               {/*  <TextInput
-                    style={styles.formInput}
-                    onChangeText={setLocation}
-                    placeholder="Localização do Produto"
-                /> */}
                 <SelectList 
                     data={list}
                     setSelected={setLocation}
-                    placeholder="Indique o seu género"
+                    placeholder="Indique em que corredor se encontra o produto"
                     boxStyles={styles.inputBox}
                     boxTextStyles= {styles.inputBoxText}
                     dropdownStyles={styles.input}
