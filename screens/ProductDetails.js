@@ -1,20 +1,25 @@
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NavBar from '../components/NavBar'
 import firebase from 'firebase'
-import auth from 'firebase'
+import { useNavigation } from '@react-navigation/native';
+
 
 
 const ProductDetails = (props) => {
-    const productInfo = props.route.params.item
+    console.log(props)
+    let [productInfo, setProductInfo] = useState(props.route.params.item)
+    const navigation = useNavigation()
     const db = firebase.firestore().collection('products')
-    const [hasValidated, setHasValidated] = useState(props.route.params.item.usersValidated.includes(firebase.auth().currentUser.email))
-    const isNegative = productInfo.rating < 0
+    const [hasValidated, setHasValidated] = useState(productInfo.usersValidated.includes(firebase.auth().currentUser.email))
+    const [isNegative, setIsNegative] = useState(productInfo.rating < 0)
     const addValidation = (a) => {
         db.doc(productInfo.id).update({ usersValidated: firebase.firestore.FieldValue.arrayUnion(firebase.auth().currentUser.email) })
         db.doc(productInfo.id).update({ rating: productInfo.rating + a })
         setHasValidated(true)
-    }
+        setIsNegative(!(productInfo.rating + a))
+        }
+    
 
     const verifyAlert = () => {
         Alert.alert(
@@ -30,6 +35,7 @@ const ProductDetails = (props) => {
             ]
         );
     }
+
 
 
     return (

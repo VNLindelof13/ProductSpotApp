@@ -4,6 +4,8 @@ import NavBar from '../components/NavBar'
 import firebase from 'firebase'
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import { useNavigation } from '@react-navigation/native';
+import Icon2 from 'react-native-vector-icons/AntDesign';
+
 
 
 const SupermarketDetails = (props) => {
@@ -12,6 +14,7 @@ const SupermarketDetails = (props) => {
     const db = firebase.firestore().collection('products')
     const [productList, setProductList] = useState([])
     const [filteredProductList, setFilteredProductList] = useState([])
+    const [filter, setFilter] = useState()
 
     const searchFilter = (text) => {
         if (text) {
@@ -27,7 +30,7 @@ const SupermarketDetails = (props) => {
             setFilteredProductList(productList)
         }
     }
-   
+
     useEffect(() => {
         const loadData = async () => {
             db
@@ -35,22 +38,24 @@ const SupermarketDetails = (props) => {
                     querySnapshot => {
                         const productListAux = []
                         querySnapshot.forEach((doc) => {
-                            const { name, location, supermarketID, rating, usersValidated } = doc.data()
-                            if (supermarketInfo.id === supermarketID) {
+                            const { name, location, supermarketID, rating, usersValidated, category } = doc.data()
+                            console.log(category)
+                            if ((supermarketInfo.id === supermarketID) && ((filter == undefined) && filter == category)) {
                                 productListAux.push({
                                     id: doc.id,
                                     name,
                                     location,
                                     supermarketID,
                                     rating,
-                                    usersValidated
+                                    usersValidated,
+                                    category,
                                 })
                             }
                         })
-                        productListAux.sort(function(a,b){
-                            if(a.rating>b.rating) return -1;
-                            if (a.rating<b.rating) return 1;
-                            if (a.rating=b.rating) return 0;
+                        productListAux.sort(function (a, b) {
+                            if (a.rating > b.rating) return -1;
+                            if (a.rating < b.rating) return 1;
+                            if (a.rating = b.rating) return 0;
                         })
                         setProductList(productListAux)
                         setFilteredProductList(productListAux)
@@ -74,9 +79,17 @@ const SupermarketDetails = (props) => {
                         color='#000'
                         size={14} />
                     <TextInput
-                        placeholder="Pesquisar supermercado..."
+                        placeholder="Pesquisar supermercado... "
                         style={styles.searchBar}
                         onChangeText={searchFilter} />
+                    <TouchableOpacity>
+                        <Icon2
+                            style={styles.searchIcon}
+                            name='filter'
+                            color='#000'
+                            size={14}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.list}>
                     <FlatList
@@ -93,8 +106,8 @@ const SupermarketDetails = (props) => {
                 </View>
                 <TouchableOpacity
                     style={styles.addProductButton}
-                    onPress={() => navigation.navigate('AddProduct', {supermarketInfo})}>
-                        <Text style={styles.buttonText}>Adicionar Produto</Text>
+                    onPress={() => navigation.navigate('AddProduct', { supermarketInfo })}>
+                    <Text style={styles.buttonText}>Adicionar Produto</Text>
                 </TouchableOpacity>
             </View>
         </View>

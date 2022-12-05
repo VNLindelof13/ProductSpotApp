@@ -13,24 +13,54 @@ import { SelectList } from 'react-native-dropdown-select-list'
 const AddProduct = (props) => {
     const [name, setName] = useState('')
     const [location, setLocation] = useState('')
-    
+    const [categoryList, setCategoryList] = useState([])
+    const [category, setCategory] = useState()
+    const dbCategory = firebase.firestore().collection('category')
+
+    useEffect(() => {
+        const loadData = async () => {
+            dbCategory
+            .onSnapshot(
+                querySnapshot => {
+                    const categoryListAux = []
+                    querySnapshot.forEach((doc) => {
+                        const { id, name } = doc.data()                        
+                        categoryListAux.push({
+                            key: id,
+                            value : name
+                        })
+                    })
+                    setCategoryList(categoryListAux)
+                }
+                )
+            };
+            loadData();
+    }, [])
+
+
+
     const navigation = useNavigation()
     const db = firebase.firestore().collection('products')
     const list = props.route.params.supermarketInfo.corridors
     const addProduct = () => {
-        if (name.length > 3){
+        if (category == undefined) {
+            Alert.alert("Localização Inválida", "Deverá selecionar uma localização para o produto.")
+            return
+        }
+        if (name.length > 3) {
             db.add({
                 name: name,
                 location: location,
                 supermarketID: props.route.params.supermarketInfo.id,
                 rating: 0,
-                usersValidated:[],
+                usersValidated: [],
+                category:category,
             })
             navigation.goBack()
         } else {
-            Alert.alert("Muito Curto", "O nome do produto deve ter pelo menos 3 caracteres")
+            Alert.alert("Muito Curto", "O nome do produto deve ter pelo menos 3 caracteres.")
         }
-       
+
     }
     return (
         <View style={styles.main}>
@@ -40,26 +70,34 @@ const AddProduct = (props) => {
             <View style={styles.header}>
                 <Text style={styles.name}>Adicionar produto {"\n" + props.route.params.supermarketInfo.name}</Text>
             </View>
-            <View style = {{flex:1}}></View>
+            <View style={{ flex: 1 }}></View>
             <View style={styles.container}>
                 <TextInput
                     style={styles.formInput}
                     onChangeText={setName}
                     placeholder="Nome do Produto"
                 />
-                <SelectList 
+                <SelectList
                     data={list}
                     setSelected={setLocation}
                     placeholder="Indique em que corredor se encontra o produto"
                     boxStyles={styles.inputBox}
-                    boxTextStyles= {styles.inputBoxText}
+                    boxTextStyles={styles.inputBoxText}
                     dropdownStyles={styles.input}
-                    dropdownItemStyles={styles.dropdownItem}/>
+                    dropdownItemStyles={styles.dropdownItem} />
+                <SelectList
+                    data={categoryList}
+                    setSelected={setCategory}
+                    placeholder="Indique em que corredor se encontra o produto"
+                    boxStyles={styles.inputBox}
+                    boxTextStyles={styles.inputBoxText}
+                    dropdownStyles={styles.input}
+                    dropdownItemStyles={styles.dropdownItem} />
                 <TouchableOpacity
-                style = {styles.addProductButton}
-                onPress={addProduct}>
+                    style={styles.addProductButton}
+                    onPress={addProduct}>
                     <Text style={styles.buttonText}> Adicionar Produto</Text>
-                    </TouchableOpacity>
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -68,7 +106,7 @@ const AddProduct = (props) => {
 export default AddProduct
 
 const styles = StyleSheet.create({
-    addProductButton:{
+    addProductButton: {
         backgroundColor: '#26972A',
         paddingVertical: 10,
         marginVertical: 30,
@@ -77,22 +115,22 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: '50%',
     },
-    
+
     buttonText: {
         color: 'white',
         fontWeight: '700',
         fontSize: 16,
     },
-    header:{
-        flex:3,
-        justifyContent:'flex-end'
+    header: {
+        flex: 3,
+        justifyContent: 'flex-end'
     },
     name: {
         fontSize: 30,
         fontWeight: '500',
         color: '#26972A',
         alignSelf: 'center',
-        textAlign:'center',
+        textAlign: 'center',
     },
     formInput: {
         backgroundColor: '#f4f4f4',
