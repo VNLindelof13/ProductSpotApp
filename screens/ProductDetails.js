@@ -4,10 +4,7 @@ import NavBar from '../components/NavBar'
 import firebase from 'firebase'
 import { useNavigation } from '@react-navigation/native';
 
-
-
 const ProductDetails = (props) => {
-    console.log(props)
     let [productInfo, setProductInfo] = useState(props.route.params.item)
     const navigation = useNavigation()
     const db = firebase.firestore().collection('products')
@@ -18,8 +15,8 @@ const ProductDetails = (props) => {
         db.doc(productInfo.id).update({ rating: productInfo.rating + a })
         setHasValidated(true)
         setIsNegative(!(productInfo.rating + a))
-        }
-    
+    }
+
 
     const verifyAlert = () => {
         Alert.alert(
@@ -44,13 +41,20 @@ const ProductDetails = (props) => {
                 showBack={true}
                 showMenu={true} />
             <View style={styles.container}>
-                {isNegative && <Text>Pela informação que temos, o produto pode não se encontrar neste local!</Text>}
-                {!hasValidated && <TouchableOpacity
-                    style={styles.buttonContainer}
-                    onPress={verifyAlert}>
-                    <Text>Validar Localização!</Text>
-                </TouchableOpacity>}
-                <Text>{productInfo.name}</Text>
+                <View style={styles.nameContainer}>
+                <Text style={styles.productName}>{productInfo.name}</Text>
+                <Text style={styles.productRating}>Rating da localização: {productInfo.rating}</Text>
+                </View>
+                {isNegative && <Text style={styles.productNegative}>Pela informação que temos, o produto pode não se encontrar neste local!</Text>}
+                {!isNegative && <Text style={styles.productLocation}>Corredor: {productInfo.location}</Text>}
+                <View style={styles.buttonContainer}>
+                    {!hasValidated && <TouchableOpacity
+                        style={styles.button}
+                        onPress={verifyAlert}>
+                        <Text style={styles.buttonText}>Validar Localização!</Text>
+                    </TouchableOpacity>}
+                </View>
+                
             </View>
         </View>
     )
@@ -66,8 +70,42 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
     },
     buttonContainer: {
+        width: "60%",
+        marginTop: 10,
+    },
+    button: {
+        backgroundColor: '#26972A',
+        paddingVertical: 10,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: '700',
+        fontSize: 16,
+    },
+
+    productName: {
+        fontSize: 30,
+        alignSelf:'center',
+    },
+    productLocation: {
+        fontSize: 20,
+    },
+    productNegative: {
+        fontSize: 20,
+        width:'80%',
+        color:'#b30000',
+    },
+    productRating:{
+        fontSize: 12,
+        marginTop:-5,
+        marginBottom:15,
+    },
+    nameContainer:{
+        width:'100%',
+        alignItems:'center',
     },
 })

@@ -39,8 +39,7 @@ const SupermarketDetails = (props) => {
                         const productListAux = []
                         querySnapshot.forEach((doc) => {
                             const { name, location, supermarketID, rating, usersValidated, category } = doc.data()
-                            console.log(category)
-                            if ((supermarketInfo.id === supermarketID) && ((filter == undefined) && filter == category)) {
+                            if ((supermarketInfo.id === supermarketID)) {
                                 productListAux.push({
                                     id: doc.id,
                                     name,
@@ -84,10 +83,10 @@ const SupermarketDetails = (props) => {
                         onChangeText={searchFilter} />
                     <TouchableOpacity>
                         <Icon2
-                            style={styles.searchIcon}
+                            style={styles.filterIcon}
                             name='filter'
                             color='#000'
-                            size={14}
+                            size={20}
                         />
                     </TouchableOpacity>
                 </View>
@@ -136,6 +135,10 @@ const styles = StyleSheet.create({
 
     searchIcon: {
         marginLeft: 10,
+    },
+    filterIcon: {
+        marginLeft: '42%',
+        alignSelf:'flex-end',
     },
 
     searchBar: {

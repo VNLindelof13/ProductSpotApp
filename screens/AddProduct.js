@@ -53,7 +53,7 @@ const AddProduct = (props) => {
                 location: location,
                 supermarketID: props.route.params.supermarketInfo.id,
                 rating: 0,
-                usersValidated: [],
+                usersValidated: [firebase.auth().currentUser.email],
                 category:category,
             })
             navigation.goBack()
@@ -88,7 +88,7 @@ const AddProduct = (props) => {
                 <SelectList
                     data={categoryList}
                     setSelected={setCategory}
-                    placeholder="Indique em que corredor se encontra o produto"
+                    placeholder="Indique qual a categoria do produto"
                     boxStyles={styles.inputBox}
                     boxTextStyles={styles.inputBoxText}
                     dropdownStyles={styles.input}

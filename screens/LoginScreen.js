@@ -7,8 +7,8 @@ import NavBar from '../components/NavBar'
 
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('teste@gmail.com')
+  const [password, setPassword] = useState('123456')
   const navigation = useNavigation()
   const [isLogin,setIsLogin] = useState(true)
 
@@ -21,7 +21,7 @@ const LoginScreen = () => {
   }
 
   const handleLogin = () => {
-    auth
+   /*  auth
       .signInWithEmailAndPassword("teste@gmail.com", "123456")
       .then(userCredentials => {
         const user = userCredentials.user;
@@ -29,15 +29,15 @@ const LoginScreen = () => {
         navigation.replace("Home")
       })
       .catch(error => alert(error.message))
-    setIsLogin(false)
-    /* auth
+    setIsLogin(false) */
+    auth
       .signInWithEmailAndPassword(email, password)
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log('Logged in with ' + user.email);
         navigation.replace("Home")
       })
-      .catch(error => alert(error.message)) */
+      .catch(error => alert(error.message))
   }
   return (
   <View style = {styles.body}>
