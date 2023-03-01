@@ -47,7 +47,7 @@ const AddProduct = (props) => {
             Alert.alert("Localização Inválida", "Deverá selecionar uma localização para o produto.")
             return
         }
-        if (name.length > 3) {
+        if (name.length >= 3) {
             db.add({
                 name: name,
                 location: location,

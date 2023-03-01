@@ -77,7 +77,7 @@ const LoginScreen = () => {
       </View>
 
       <TouchableOpacity onPress={handleForgotPassword}>
-        <Text style={styles.buttonOutlineText}>Esqueci-me da password</Text>
+        <Text style={styles.registerTextClick}>Esqueci-me da password</Text>
       </TouchableOpacity>
 
 

@@ -5,16 +5,23 @@ import firebase from 'firebase'
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import { useNavigation } from '@react-navigation/native';
 import Icon2 from 'react-native-vector-icons/AntDesign';
+import { SelectList } from 'react-native-dropdown-select-list'
+
 
 
 
 const SupermarketDetails = (props) => {
     const supermarketInfo = props.route.params.item
+    const test = parseInt(props.route.params.aux)
+
     const navigation = useNavigation()
     const db = firebase.firestore().collection('products')
     const [productList, setProductList] = useState([])
     const [filteredProductList, setFilteredProductList] = useState([])
-    const [filter, setFilter] = useState()
+    const [filter, setFilter] = useState(0)
+    const [categoryList, setCategoryList] = useState([])
+    const dbCategory = firebase.firestore().collection('category')
+    console.log(filter)
 
     const searchFilter = (text) => {
         if (text) {
@@ -39,7 +46,7 @@ const SupermarketDetails = (props) => {
                         const productListAux = []
                         querySnapshot.forEach((doc) => {
                             const { name, location, supermarketID, rating, usersValidated, category } = doc.data()
-                            if ((supermarketInfo.id === supermarketID)) {
+                            if (supermarketInfo.id === supermarketID && category == filter) {
                                 productListAux.push({
                                     id: doc.id,
                                     name,
@@ -49,6 +56,7 @@ const SupermarketDetails = (props) => {
                                     usersValidated,
                                     category,
                                 })
+
                             }
                         })
                         productListAux.sort(function (a, b) {
@@ -60,9 +68,28 @@ const SupermarketDetails = (props) => {
                         setFilteredProductList(productListAux)
                     }
                 )
+            dbCategory
+                .onSnapshot(
+                    querySnapshot => {
+                        const categoryListAux = []
+                        querySnapshot.forEach((doc) => {
+                            const { id, name } = doc.data()
+                            categoryListAux.push({
+                                key: id,
+                                value: name
+                            })
+                        })
+                        setCategoryList(categoryListAux)
+                    }
+                )
         };
         loadData();
+
     }, [])
+
+    const onClickFilterItem = () => {
+        navigation.navigate('SupermarketFilter', { supermarketInfo })
+    }
 
     return (
         <View style={styles.main}>
@@ -81,14 +108,22 @@ const SupermarketDetails = (props) => {
                         placeholder="Pesquisar supermercado... "
                         style={styles.searchBar}
                         onChangeText={searchFilter} />
-                    <TouchableOpacity>
+                    {/* <TouchableOpacity onPress={onClickFilterItem}>
                         <Icon2
                             style={styles.filterIcon}
                             name='filter'
                             color='#000'
                             size={20}
                         />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+                    <SelectList
+                        data={categoryList}
+                        setSelected={setFilter}
+                        placeholder="Indique em que corredor se encontra o produto"
+                        boxStyles={styles.inputBox}
+                        boxTextStyles={styles.inputBoxText}
+                        dropdownStyles={styles.input}
+                        dropdownItemStyles={styles.dropdownItem} />
                 </View>
                 <View style={styles.list}>
                     <FlatList
@@ -98,7 +133,7 @@ const SupermarketDetails = (props) => {
                                 style={styles.itemContainer}
                                 onPress={() => navigation.navigate('ProductDetails', { item })}
                             >
-                                <Text> {item.name}</Text>
+                                <Text> {item.category}</Text>
                                 <Text> Corredor {item.location}</Text>
                             </TouchableOpacity>
                         )} />
@@ -138,7 +173,7 @@ const styles = StyleSheet.create({
     },
     filterIcon: {
         marginLeft: '42%',
-        alignSelf:'flex-end',
+        alignSelf: 'flex-end',
     },
 
     searchBar: {

@@ -56,6 +56,11 @@ const HomeScreen = () => {
     }
   }
 
+  const handleClick2 = (item) => {
+    const test = []
+    navigation.navigate('SupermarketDetails', { item , test })
+  }
+
   return (
     <View style={styles.main}>
       <NavBar 
@@ -97,7 +102,7 @@ const HomeScreen = () => {
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.itemContainer}
-                  onPress={() => navigation.navigate('SupermarketDetails', { item })}>
+                  onPress={() => handleClick2(item)}>
                   <Text> {item.name}</Text>
                   <Text> {item.location}</Text>
                 </TouchableOpacity>
