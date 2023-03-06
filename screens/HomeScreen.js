@@ -4,15 +4,17 @@ import { firebase } from '../firebase'
 import { useNavigation } from '@react-navigation/native'
 import NavBar from '../components/NavBar'
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-/* import MapboxGL from "@react-native-mapbox-gl/maps"; */
- 
+/* 
+import MapboxGL from "@react-native-mapbox-gl/maps";
+MapboxGL.setAccessToken("pk.eyJ1IjoicGF0cmljaWFzdGV2ZXMiLCJhIjoiY2xlcHp1cXhrMGhmMzN2cDQzZnlmb3RkMSJ9.OwWHR3KCdMM9mI57bOkTqg");
+ */ 
 const HomeScreen = () => {
   const [mapFocused, setMapFocused] = useState(true)
   const navigation = useNavigation()
   const [marketList, setMarketList] = useState([])
   const [marketListFiltered, setMarketListFiltered] = useState(marketList)
   const db = firebase.firestore().collection('market')
- /*  MapboxGL.setAccessToken("ProductSpot"); */
+  const [coordinates] = useState([78.9629, 20.5937]);
   
 
   const handleClick = () => {
@@ -95,8 +97,15 @@ const HomeScreen = () => {
             style={styles.searchBar}
             onChangeText={searchFilter} />
         </View>
-        {mapFocused ?
-          (<View style={styles.placeholderText}></View>)
+        {mapFocused ? <View><Text>asdf</Text></View>
+          /* ( {<MapboxGL.MapView style={styles.map}>
+            <MapboxGL.Camera
+              zoomLevel={4}
+              centerCoordinate={coordinates}
+            />
+            <MapboxGL.PointAnnotation coordinate={coordinates} />
+          </MapboxGL.MapView>}
+           */
           :
           (<View style={styles.marketList}>
             <FlatList
