@@ -94,7 +94,10 @@ const HomeScreen = () => {
             onChangeText={searchFilter} />
         </View>
         {mapFocused ?
-          (<View style={styles.placeholderText}><Text>Vista do Mapa</Text></View>)
+          (<View style={styles.placeholderText}><Text>Vista do Mapa</Text>
+          <Text>Vista do Mapa</Text>
+          <Text>Vista do Mapa</Text>
+          <Text>Vista do Mapa</Text></View>)
           :
           (<View style={styles.marketList}>
             <FlatList

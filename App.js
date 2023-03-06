@@ -8,6 +8,7 @@ import AuthenticationStack from './Stacks/AuthenticationStack';
 
 const Stack = createNativeStackNavigator();
 
+
 export default function App() {
   return (
     <NavigationContainer>

@@ -11,30 +11,53 @@ import { SelectList } from 'react-native-dropdown-select-list'
 
 
 const AddProduct = (props) => {
+    const addingPoints = 10
     const [name, setName] = useState('')
     const [location, setLocation] = useState('')
     const [categoryList, setCategoryList] = useState([])
+    const [userList, setUserList] = useState([])
     const [category, setCategory] = useState()
     const dbCategory = firebase.firestore().collection('category')
+    const dbUsers = firebase.firestore().collection('users')
+
 
     useEffect(() => {
         const loadData = async () => {
             dbCategory
-            .onSnapshot(
-                querySnapshot => {
-                    const categoryListAux = []
-                    querySnapshot.forEach((doc) => {
-                        const { id, name } = doc.data()                        
-                        categoryListAux.push({
-                            key: id,
-                            value : name
+                .onSnapshot(
+                    querySnapshot => {
+                        const categoryListAux = []
+                        querySnapshot.forEach((doc) => {
+                            const { id, name } = doc.data()
+                            categoryListAux.push({
+                                key: id,
+                                value: name
+                            })
                         })
-                    })
-                    setCategoryList(categoryListAux)
-                }
+                        setCategoryList(categoryListAux)
+                    }
                 )
-            };
-            loadData();
+                dbUsers
+                .onSnapshot(
+                    querySnapshot => {
+                        const userListAux = []
+                        querySnapshot.forEach((doc) => {
+                            const { id, nome, pontos, genero, dataNascimento } = doc.data()
+                            if(id == firebase.auth().currentUser.email){
+                            userListAux.push({
+                                key: doc.id,
+                                value: nome,
+                                pontos,
+                            })
+                           
+                        }
+                        })
+                        setUserList(userListAux)
+                    }
+                )
+        };
+        loadData();
+       
     }, [])
 
 
@@ -54,14 +77,16 @@ const AddProduct = (props) => {
                 supermarketID: props.route.params.supermarketInfo.id,
                 rating: 0,
                 usersValidated: [firebase.auth().currentUser.email],
-                category:category,
+                category: category,
             })
+            dbUsers.doc(userList[0].key).update({ pontos: userList[0].pontos + addingPoints })
             navigation.goBack()
         } else {
             Alert.alert("Muito Curto", "O nome do produto deve ter pelo menos 3 caracteres.")
         }
 
     }
+
     return (
         <View style={styles.main}>
             <NavBar

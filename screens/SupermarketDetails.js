@@ -12,16 +12,12 @@ import { SelectList } from 'react-native-dropdown-select-list'
 
 const SupermarketDetails = (props) => {
     const supermarketInfo = props.route.params.item
-    const test = parseInt(props.route.params.aux)
-
     const navigation = useNavigation()
     const db = firebase.firestore().collection('products')
     const [productList, setProductList] = useState([])
     const [filteredProductList, setFilteredProductList] = useState([])
-    const [filter, setFilter] = useState(0)
     const [categoryList, setCategoryList] = useState([])
     const dbCategory = firebase.firestore().collection('category')
-    console.log(filter)
 
     const searchFilter = (text) => {
         if (text) {
@@ -38,6 +34,23 @@ const SupermarketDetails = (props) => {
         }
     }
 
+    const categoryFilter = (categoryList) => {
+        if (categoryList) {
+            if (categoryList == 0){
+                setFilteredProductList(productList)
+                return;
+            }
+            const newData = productList.filter(item => {
+                if (item.category == categoryList) {
+                    return item.category
+                }
+            })
+            setFilteredProductList(newData.sort());
+        } else {
+            setFilteredProductList(productList)
+        }
+    }
+
     useEffect(() => {
         const loadData = async () => {
             db
@@ -46,7 +59,7 @@ const SupermarketDetails = (props) => {
                         const productListAux = []
                         querySnapshot.forEach((doc) => {
                             const { name, location, supermarketID, rating, usersValidated, category } = doc.data()
-                            if (supermarketInfo.id === supermarketID && category == filter) {
+                            if (supermarketInfo.id === supermarketID) {
                                 productListAux.push({
                                     id: doc.id,
                                     name,
@@ -91,6 +104,29 @@ const SupermarketDetails = (props) => {
         navigation.navigate('SupermarketFilter', { supermarketInfo })
     }
 
+    useEffect(() => {
+        const loadData = async () => {
+            dbCategory
+                .onSnapshot(
+                    querySnapshot => {
+                        const categoryListAux = []
+                        querySnapshot.forEach((doc) => {
+                            const { id, name } = doc.data()
+                            categoryListAux.push({
+                                key: id,
+                                value: name
+                            })
+                        })
+                        setCategoryList(categoryListAux)
+                    }
+                )
+                
+                
+        };
+        loadData();
+       
+    }, [])
+
     return (
         <View style={styles.main}>
             <NavBar
@@ -118,7 +154,7 @@ const SupermarketDetails = (props) => {
                     </TouchableOpacity> */}
                     <SelectList
                         data={categoryList}
-                        setSelected={setFilter}
+                        setSelected={categoryFilter}
                         placeholder="Indique em que corredor se encontra o produto"
                         boxStyles={styles.inputBox}
                         boxTextStyles={styles.inputBoxText}
@@ -133,7 +169,7 @@ const SupermarketDetails = (props) => {
                                 style={styles.itemContainer}
                                 onPress={() => navigation.navigate('ProductDetails', { item })}
                             >
-                                <Text> {item.category}</Text>
+                                <Text> {item.name}</Text>
                                 <Text> Corredor {item.location}</Text>
                             </TouchableOpacity>
                         )} />

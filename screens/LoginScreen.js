@@ -38,6 +38,8 @@ const LoginScreen = () => {
         navigation.replace("Home")
       })
       .catch(error => alert(error.message))
+      navigation.replace("Home")
+
   }
   return (
   <View style = {styles.body}>
