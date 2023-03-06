@@ -18,7 +18,7 @@ const Menu = () => {
         navigation.popToTop()
     }
     const handleGammification  = () => {
-
+        navigation.navigate("Gamification")
     }
     const handleLogout  = () => {
         auth
@@ -49,7 +49,7 @@ const Menu = () => {
                     </TouchableOpacity>
                 </View><View style={styles.buttonContainer}>
                     <TouchableOpacity
-                        onPress={()=>{}}
+                        onPress={handleGammification}
                         style={styles.button}>
                         <Text style={styles.buttonText}> Bonificação </Text>
                     </TouchableOpacity>

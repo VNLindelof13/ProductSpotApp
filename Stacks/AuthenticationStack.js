@@ -10,6 +10,7 @@ import SupermarketDetails from '../screens/SupermarketDetails';
 import ProductDetails from '../screens/ProductDetails';
 import AddProduct from '../screens/AddProduct';
 import SupermarketFilter from '../screens/SupermarketFilter'
+import Gamification from '../screens/Gamification';
 
 const Stack = createNativeStackNavigator();
 function AuthenticationStack()  {
@@ -63,6 +64,11 @@ function AuthenticationStack()  {
         options = {{headerShown:  false}} 
         name="SupermarketFilter" 
         component={SupermarketFilter} 
+        />
+        <Stack.Screen 
+        options = {{headerShown:  false}} 
+        name="Gamification" 
+        component={Gamification} 
         />
       </Stack.Navigator>
   )
