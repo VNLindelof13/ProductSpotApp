@@ -5,11 +5,6 @@ import NavBar from '../components/NavBar'
 import { useNavigation } from '@react-navigation/native';
 import { SelectList } from 'react-native-dropdown-select-list'
 
-
-
-
-
-
 const AddProduct = (props) => {
     const addingPoints = 10
     const [name, setName] = useState('')
