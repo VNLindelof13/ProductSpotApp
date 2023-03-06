@@ -16,8 +16,8 @@ const Gamification = (props) => {
     const navigation = useNavigation()
     const [rewardList, setRewardList] = useState([])
     const [userList, setUserList] = useState([])
-    const [aux,setAux] = useState(0)
-    const [auxKey,setAuxKey] = useState('')
+    const [aux, setAux] = useState(0)
+    const [auxKey, setAuxKey] = useState('')
 
 
     useEffect(() => {
@@ -26,7 +26,7 @@ const Gamification = (props) => {
                 .onSnapshot(
                     querySnapshot => {
                         const rewardListAux = []
-                        querySnapshot.forEach((doc) => {                            
+                        querySnapshot.forEach((doc) => {
                             const { id, name, points } = doc.data()
                             rewardListAux.push({
                                 id,
@@ -36,14 +36,19 @@ const Gamification = (props) => {
 
 
                         })
+                        rewardListAux.sort(function (a, b) {
+                            if (a.points > b.points) return 1;
+                            if (a.points < b.points) return -1;
+                            if (a.points = b.points) return 0;
+                        })
                         setRewardList(rewardListAux)
-                        
+
                     }
-                )            
+                )
         };
         const loadUserData = async () => {
             dbUsers
-                .onSnapshot(                    
+                .onSnapshot(
                     querySnapshot => {
                         const userListAux = []
                         querySnapshot.forEach((doc) => {
@@ -55,27 +60,28 @@ const Gamification = (props) => {
                         })
                         setUserList(userListAux)
                     }
-                )      
+                )
         };
         loadData()
         loadUserData()
-        
+
     }, [])
 
     const verifyAlert = (args) => {
-        console.log("Aux : " +aux + " | args.points "+  args.points)
-        Alert.alert(
-            "Reclamar a recompensa",
-            "Esta recompensa custa " + args.points + " pontos. Quer reclamar a recompensa " + args.name +"",
-            [
-                {
-                    text: "Cancelar",
-                    onPress: () => ({}),
-                    style: "cancel"
-                },
-                { text: "Confirmo!", onPress: () => dbUsers.doc(auxKey).update({ pontos: aux - args.points }) }
-            ]
-        );
+        if (aux - args.points >= 0) {
+            Alert.alert(
+                "Reclamar a recompensa",
+                "Esta recompensa custa " + args.points + " pontos. Quer reclamar a recompensa " + args.name + "",
+                [
+                    {
+                        text: "Cancelar",
+                        onPress: () => ({}),
+                        style: "cancel"
+                    },
+                    { text: "Confirmo!", onPress: () => dbUsers.doc(auxKey).update({ pontos: aux - args.points }) }
+                ]
+            );
+        }
     }
     return (
         <View style={styles.main}>
@@ -90,12 +96,22 @@ const Gamification = (props) => {
                 data={rewardList}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        style={styles.box1}
-                        onPress={() =>verifyAlert(item)}
+                        onPress={() => verifyAlert(item)}
                     >
-                        <Text> {}</Text>
-                        <Text style = {styles.rewardText}> Recompensa {item.name}</Text>
+                        {(aux - item.points >= 0) ?
+                            <View style={styles.box1}>
+                                <Text style={styles.rewardText}>Recompensa {item.name}</Text>
+                                <Text style={styles.rewardText}>Pontos {item.points}</Text>
+                            </View> :
+                            <View style={styles.box2}><Text style={styles.rewardText}>Recompensa {item.name}</Text>
+                                <Text style={styles.rewardText}>Pontos {item.points}</Text>
+
+                            </View>}
                     </TouchableOpacity>
+
+
+
+
                 )} />
         </View>
     )
@@ -111,32 +127,46 @@ const styles = StyleSheet.create({
     headerContainer: {
         alignSelf: 'center',
         paddingVertical: 10,
-        justifyContent:'center'
+        justifyContent: 'center'
     },
     header: {
         fontSize: 25,
     },
     pointsText: {
-        textAlign:'center',
+        textAlign: 'center',
         fontSize: 25,
     },
     rewardText: {
-        textAlign:'center',
-        letterSpacing:1,
+        textAlign: 'center',
+        letterSpacing: 1,
         fontSize: 15,
+    },
+    rewardNotText: {
+        textAlign: 'center',
+        letterSpacing: 1,
+        fontSize: 15,
+        color: 'red',
     },
 
     box1: {
-        width: 100,
+        width: 200,
         height: 100,
-        backgroundColor: 'pink',
+        backgroundColor: `#00fa9a`,
         alignSelf: 'center',
         marginVertical: 10,
+        justifyContent: 'center',
+        borderRadius: 15,
+
     },
     box2: {
-        width: 100,
+        width: 200,
         height: 100,
-        backgroundColor: 'red',
+        backgroundColor: `red`,
+        alignSelf: 'center',
+        marginVertical: 10,
+        justifyContent: 'center',
+        borderRadius: 15,
+
     },
     box3: {
         width: 100,

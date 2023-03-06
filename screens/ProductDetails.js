@@ -135,5 +135,6 @@ const styles = StyleSheet.create({
     nameContainer: {
         width: '100%',
         alignItems: 'center',
+        textAlign:'center',
     },
 })

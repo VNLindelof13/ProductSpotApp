@@ -4,14 +4,16 @@ import { firebase } from '../firebase'
 import { useNavigation } from '@react-navigation/native'
 import NavBar from '../components/NavBar'
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-
+/* import MapboxGL from "@react-native-mapbox-gl/maps"; */
+ 
 const HomeScreen = () => {
   const [mapFocused, setMapFocused] = useState(true)
   const navigation = useNavigation()
   const [marketList, setMarketList] = useState([])
   const [marketListFiltered, setMarketListFiltered] = useState(marketList)
   const db = firebase.firestore().collection('market')
-
+ /*  MapboxGL.setAccessToken("ProductSpot"); */
+  
 
   const handleClick = () => {
     setMapFocused(!mapFocused)
@@ -94,10 +96,7 @@ const HomeScreen = () => {
             onChangeText={searchFilter} />
         </View>
         {mapFocused ?
-          (<View style={styles.placeholderText}><Text>Vista do Mapa</Text>
-          <Text>Vista do Mapa</Text>
-          <Text>Vista do Mapa</Text>
-          <Text>Vista do Mapa</Text></View>)
+          (<View style={styles.placeholderText}></View>)
           :
           (<View style={styles.marketList}>
             <FlatList
