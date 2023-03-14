@@ -13,6 +13,9 @@ const NavBar = (props) => {
   const handleClick = () => {
     navigation.navigate("Menu")
   }
+  const handleClickSupermarket = () => {
+    navigation.navigate("MenuSupermarket")
+  }
   const handleBackClick = () => {
     navigation.goBack();
   }
@@ -24,6 +27,15 @@ const NavBar = (props) => {
       {props.showMenu && 
       <TouchableOpacity
       onPress={handleClick}>
+        <Icon
+          style={styles.menuIcon}
+          name='menu'
+          size={20}
+          color={'#26972A'} />
+      </TouchableOpacity>}
+      {props.showMenuSupermarket && 
+      <TouchableOpacity
+      onPress={handleClickSupermarket}>
         <Icon
           style={styles.menuIcon}
           name='menu'

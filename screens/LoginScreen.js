@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { auth } from '../firebase'
 import { useNavigation } from '@react-navigation/core'
 import NavBar from '../components/NavBar'
+import { firebase } from '../firebase'
+
 
 
 
@@ -10,7 +12,26 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('teste@gmail.com')
   const [password, setPassword] = useState('123456')
   const navigation = useNavigation()
-  const [isLogin,setIsLogin] = useState(true)
+  const [userRole, setUserRole] = useState(0)
+  const dbUsers = firebase.firestore().collection('users')
+  useEffect(() => {
+    const loadData = async () => {
+      dbUsers
+        .onSnapshot(
+          querySnapshot => {
+            const userListAux = []
+            querySnapshot.forEach((doc) => {
+              const { id, nome, role } = doc.data()
+              if (id == email) {
+                setUserRole(role)
+              }
+            })
+          }
+        )
+    };
+    loadData();
+  }, [])
+
 
   const handleSignUp = () => {
     navigation.navigate("Register")
@@ -21,69 +42,63 @@ const LoginScreen = () => {
   }
 
   const handleLogin = () => {
-   /*  auth
-      .signInWithEmailAndPassword("teste@gmail.com", "123456")
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        console.log('Logged in with ' + user.email);
-        navigation.replace("Home")
-      })
-      .catch(error => alert(error.message))
-    setIsLogin(false) */
     auth
       .signInWithEmailAndPassword(email, password)
       .then(userCredentials => {
         const user = userCredentials.user;
-        console.log('Logged in with ' + user.email);
-        navigation.replace("Home")
+        if (userRole == 1) {
+          navigation.replace("HomeSupermarket")
+        } else {
+          navigation.replace("Home")
+        }
+
       })
       .catch(error => alert(error.message))
-      navigation.replace("Home")
 
   }
   return (
-  <View style = {styles.body}>
-    <NavBar 
-    showMenu ={false}/>
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior="padding">
-      <Text style={styles.header}>Iniciar Sessão</Text>
-      <View style={styles.inputContainers}>
-        <TextInput
-          placeholder="E-mail"
-          value={email}
-          onChangeText={text => setEmail(text)}
-          style={styles.input}
-        ></TextInput>
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={text => setPassword(text)}
-          style={styles.input}
-          secureTextEntry
-        ></TextInput>
-      </View>
+    <View style={styles.body}>
+      <NavBar
+        showMenu={false} />
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior="padding">
+        <Text style={styles.header}>Iniciar Sessão</Text>
+        <View style={styles.inputContainers}>
+          <TextInput
+            placeholder="E-mail"
+            value={email}
+            onChangeText={text => setEmail(text)}
+            style={styles.input}
+          ></TextInput>
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={text => setPassword(text)}
+            style={styles.input}
+            secureTextEntry
+          ></TextInput>
+        </View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={handleLogin}
-          style={styles.button}>
-          <Text style={styles.buttonText}> Iniciar Sessão </Text>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={handleLogin}
+            style={styles.button}>
+            <Text style={styles.buttonText}> Iniciar Sessão </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.registerContainer}>
+          <Text>Não tens conta? <Text style={styles.registerTextClick} onPress={handleSignUp}>Regista-te </Text>
+          </Text>
+        </View>
+
+        <TouchableOpacity onPress={handleForgotPassword}>
+          <Text style={styles.registerTextClick}>Esqueci-me da password</Text>
         </TouchableOpacity>
-      </View>
-
-      <View style={styles.registerContainer}>
-        <Text>Não tens conta? <Text style={styles.registerTextClick} onPress={handleSignUp}>Regista-te </Text>
-        </Text>
-      </View>
-
-      <TouchableOpacity onPress={handleForgotPassword}>
-        <Text style={styles.registerTextClick}>Esqueci-me da password</Text>
-      </TouchableOpacity>
 
 
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
     </View>
   )
 }
@@ -91,9 +106,9 @@ const LoginScreen = () => {
 export default LoginScreen
 
 const styles = StyleSheet.create({
-  body:{
-    flex:1,
-    backgroundColor:'#fff',
+  body: {
+    flex: 1,
+    backgroundColor: '#fff',
 
   },
 
@@ -113,7 +128,7 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    backgroundColor:'#f4f4f4',
+    backgroundColor: '#f4f4f4',
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,

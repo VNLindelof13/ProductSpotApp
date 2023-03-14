@@ -7,32 +7,32 @@ import { useNavigation } from '@react-navigation/core'
 
 
 
-const Menu = () => {
+const MenuSupermarket = () => {
     const navigation = useNavigation()
 
-    const handlePersonalArea  = () => {
+    const handlePersonalArea = () => {
         navigation.navigate("Perfil")
     }
 
-    const handleMarketList  = () => {
+    const handleMarketList = () => {
         navigation.popToTop()
     }
-    const handleGammification  = () => {
+    const handleGammification = () => {
         navigation.navigate("Gamification")
     }
-    const handleLogout  = () => {
+    const handleLogout = () => {
         auth
-        .signOut()
-        .then(() => {
-          navigation.replace("Login")
-        })
-        .catch(error => alert(error.message))
+            .signOut()
+            .then(() => {
+                navigation.replace("Login")
+            })
+            .catch(error => alert(error.message))
     }
     return (
         <View>
-            <NavBar 
-            showMenu={true}
-            showBack={true} />
+            <NavBar
+                showMenuSupermarket={true}
+                showBack={true} />
             <View style={styles.main}>
                 <Text style={styles.header}>Menu</Text>
                 <View style={styles.buttonContainer}>
@@ -41,19 +41,8 @@ const Menu = () => {
                         style={styles.button}>
                         <Text style={styles.buttonText}> Área Pessoal</Text>
                     </TouchableOpacity>
-                </View><View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        onPress={handleMarketList}
-                        style={styles.button}>
-                        <Text style={styles.buttonText}> Supermercados </Text>
-                    </TouchableOpacity>
-                </View><View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        onPress={handleGammification}
-                        style={styles.button}>
-                        <Text style={styles.buttonText}> Bonificação </Text>
-                    </TouchableOpacity>
-                </View><View style={styles.buttonContainer}>
+                </View>
+                <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         onPress={handleLogout}
                         style={styles.button}>
@@ -65,31 +54,31 @@ const Menu = () => {
     )
 }
 
-export default Menu
+export default MenuSupermarket
 
 const styles = StyleSheet.create({
-    main:{
-        height:'100%',
-        paddingTop:'30%',
-        alignItems:'center',
-        backgroundColor:'white'
+    main: {
+        height: '100%',
+        paddingTop: '30%',
+        alignItems: 'center',
+        backgroundColor: 'white'
     },
-    buttonContainer: { 
+    buttonContainer: {
         width: "60%",
         marginTop: 20,
-      },
+    },
     button: {
         backgroundColor: '#26972A',
         paddingVertical: 10,
         borderRadius: 10,
         alignItems: 'center',
-      },
+    },
     buttonText: {
         color: 'white',
         fontWeight: '700',
         fontSize: 16,
-      },
-      header: {
+    },
+    header: {
         fontSize: 32,
-      },
+    },
 })

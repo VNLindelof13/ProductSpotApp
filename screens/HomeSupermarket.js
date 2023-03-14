@@ -1,36 +1,21 @@
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList,  StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { firebase } from '../firebase'
 import { useNavigation } from '@react-navigation/native'
 import NavBar from '../components/NavBar'
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import MapView from 'react-native-maps';
-
 /* 
 import MapboxGL from "@react-native-mapbox-gl/maps";
 MapboxGL.setAccessToken("pk.eyJ1IjoicGF0cmljaWFzdGV2ZXMiLCJhIjoiY2xlcHp1cXhrMGhmMzN2cDQzZnlmb3RkMSJ9.OwWHR3KCdMM9mI57bOkTqg");
- */
-const HomeScreen = () => {
+ */ 
+const HomeSupermarket = () => {
   const [mapFocused, setMapFocused] = useState(true)
-  const [mapRef,updateMapRef] = useState(null)
   const navigation = useNavigation()
   const [marketList, setMarketList] = useState([])
   const [marketListFiltered, setMarketListFiltered] = useState(marketList)
   const db = firebase.firestore().collection('market')
   const [coordinates] = useState([78.9629, 20.5937]);
-  const mapVar = useState(
-    
-  )
-
-
-  const handleMapRes = () => {
-    if (mapRef === null) {
-      return
-    }
-    mapRef
-  }
-
-
+  
 
   const handleClick = () => {
     setMapFocused(!mapFocused)
@@ -77,100 +62,26 @@ const HomeScreen = () => {
 
   const handleClick2 = (item) => {
     const test = []
-    navigation.navigate('SupermarketDetails', { item, test })
+    navigation.navigate('SupermarketDetails', { item , test })
   }
 
   return (
     <View style={styles.main}>
-      <NavBar
-        showMenu={true} />
-      <View style={styles.selector}>
-        <TouchableOpacity
-          onPress={handleClick}
-          style={styles.buttonHeader}>
-          <Text style={[styles.selectorText, mapFocused && styles.mapOff]}>
-            Mapa
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleClick}
-          style={styles.buttonHeader}>
-          <Text style={[styles.selectorText, !mapFocused && styles.mapOff]}>
-            Lista
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.container}>
-        <View style={styles.searchBarContainer}>
-          <Icon
-            style={styles.searchIcon}
-            name='magnifier'
-            color='#000'
-            size={14} />
-          <TextInput
-            placeholder="Pesquisar supermercado..."
-            style={styles.searchBar}
-            onChangeText={searchFilter} />
-        </View>
-        {mapFocused ? <View style={styles.mapBox}>
-        <MapView
-        style = {styles.mapStyles}
-        ref={(ref) => updateMapRef(ref)}
-            onMapReady={() => {}}
-            initialRegion={{
-              latitude: 38.7223,
-              longitude: -9.1393,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-          />
-        </View>
-
-          /* ( {<MapboxGL.MapView style={styles.map}>
-            <MapboxGL.Camera
-              zoomLevel={4}
-              centerCoordinate={coordinates}
-            />
-            <MapboxGL.PointAnnotation coordinate={coordinates} />
-          </MapboxGL.MapView>}
-           */
-          :
-          (<View style={styles.marketList}>
-            <FlatList
-              data={marketListFiltered}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.itemContainer}
-                  onPress={() => handleClick2(item)}>
-                  <Text> {item.name}</Text>
-                  <Text> {item.location}</Text>
-                </TouchableOpacity>
-              )} />
-
-          </View>)}
-      </View>
+      <NavBar 
+      showMenu={false}
+      showMenuSupermarket={true}
+      />
     </View>
   )
 }
 
-export default HomeScreen
+export default HomeSupermarket
 
 const styles = StyleSheet.create({
   marketList: {
     flex: 1,
     marginTop: 5,
   },
-  mapBox: {
-    ...StyleSheet.absoluteFillObject,
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-  },
-
-  mapStyles:{
-    ...StyleSheet.absoluteFillObject,
-  },
-
   itemContainer: {
     padding: 10,
     borderColor: '#d0d0d0',
