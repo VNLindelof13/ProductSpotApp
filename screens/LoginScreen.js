@@ -22,8 +22,8 @@ const LoginScreen = () => {
           querySnapshot => {
             const userListAux = []
             querySnapshot.forEach((doc) => {
-              const { id, nome, role } = doc.data()
-              if (id == email) {
+              const {role } = doc.data()
+              if (role == 1) {
                 userListAux.push(
                   email
                 )
@@ -46,7 +46,6 @@ const LoginScreen = () => {
   }
 
   const handleLogin = () => {
-    console.log(email)
     auth
       .signInWithEmailAndPassword(email, password)
       .then(() => {
