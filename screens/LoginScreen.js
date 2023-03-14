@@ -13,6 +13,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('123456')
   const navigation = useNavigation()
   const [userRole, setUserRole] = useState(0)
+  const [adminList, setAdminList] = useState([])
   const dbUsers = firebase.firestore().collection('users')
   useEffect(() => {
     const loadData = async () => {
@@ -23,9 +24,12 @@ const LoginScreen = () => {
             querySnapshot.forEach((doc) => {
               const { id, nome, role } = doc.data()
               if (id == email) {
-                setUserRole(role)
+                userListAux.push(
+                  email
+                )
               }
             })
+            setAdminList(userListAux)
           }
         )
     };
@@ -42,11 +46,12 @@ const LoginScreen = () => {
   }
 
   const handleLogin = () => {
+    console.log(email)
     auth
       .signInWithEmailAndPassword(email, password)
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        if (userRole == 1) {
+      .then(() => {
+
+        if (adminList.indexOf(email) > -1) {
           navigation.replace("HomeSupermarket")
         } else {
           navigation.replace("Home")
