@@ -4,12 +4,8 @@ import { firebase } from '../firebase'
 import { useNavigation } from '@react-navigation/native'
 import NavBar from '../components/NavBar'
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import {MapView,Marker} from 'react-native-maps';
+import MapView from 'react-native-maps';
 
-/* 
-import MapboxGL from "@react-native-mapbox-gl/maps";
-MapboxGL.setAccessToken("pk.eyJ1IjoicGF0cmljaWFzdGV2ZXMiLCJhIjoiY2xlcHp1cXhrMGhmMzN2cDQzZnlmb3RkMSJ9.OwWHR3KCdMM9mI57bOkTqg");
- */
 const HomeScreen = () => {
   const [mapFocused, setMapFocused] = useState(true)
   const [mapRef, updateMapRef] = useState(null)
@@ -17,18 +13,6 @@ const HomeScreen = () => {
   const [marketList, setMarketList] = useState([])
   const [marketListFiltered, setMarketListFiltered] = useState(marketList)
   const db = firebase.firestore().collection('market')
-  const [coordinates] = useState([78.9629, 20.5937]);
-  const mapVar = useState(
-
-  )
-
-
-  const handleMapRes = () => {
-    if (mapRef === null) {
-      return
-    }
-    mapRef
-  }
 
 
 
@@ -76,7 +60,7 @@ const HomeScreen = () => {
   }
 
   const loadPins = () => {
-    
+
   }
 
   const handleClick2 = (item) => {
@@ -116,20 +100,18 @@ const HomeScreen = () => {
             style={styles.searchBar}
             onChangeText={searchFilter} />
         </View>
-        {mapFocused ? <View style={styles.mapBox}>
-          <MapView
-            style={styles.mapStyles}
-            ref={(ref) => updateMapRef(ref)}
-            onMapReady={loadPins}
-            initialRegion={{
-              latitude: 38.7223,
-              longitude: -9.1393,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-              
-            }}
-          />
-        </View>
+        {mapFocused ?
+          (<View style={styles.mapBox}>
+           { <MapView 
+              style={styles.mapStyles}
+              initialRegion={{
+                latitude: 38.7223,
+                longitude: -9.1393,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+            />}
+          </View>)
           :
           (<View style={styles.marketList}>
             <FlatList

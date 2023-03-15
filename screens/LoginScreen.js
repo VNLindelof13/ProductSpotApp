@@ -5,16 +5,12 @@ import { useNavigation } from '@react-navigation/core'
 import NavBar from '../components/NavBar'
 import { firebase } from '../firebase'
 
-
-
-
 const LoginScreen = () => {
   const [email, setEmail] = useState('teste@gmail.com')
   const [password, setPassword] = useState('123456')
   const navigation = useNavigation()
-  const [userRole, setUserRole] = useState(0)
-  const [adminList, setAdminList] = useState([])
   const dbUsers = firebase.firestore().collection('users')
+  const [adminList,setAdminList] = useState([])
   useEffect(() => {
     const loadData = async () => {
       dbUsers
@@ -49,7 +45,6 @@ const LoginScreen = () => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-
         if (adminList.indexOf(email) > -1) {
           navigation.replace("HomeSupermarket")
         } else {

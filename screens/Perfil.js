@@ -47,7 +47,6 @@ const Perfil = (props) => {
             <NavBar
                 showBack={true}
                 showMenu={true} />
-                <Text> {firebase.auth().currentUser.email}</Text>
         </View>
     )
 }
