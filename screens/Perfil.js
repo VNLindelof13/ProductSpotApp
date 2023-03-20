@@ -9,12 +9,12 @@ import { SelectList } from 'react-native-dropdown-select-list'
 const Perfil = (props) => {
     const dbUsers = firebase.firestore().collection('users')
     const [userList, setUserList] = useState([])
-    
-   
+
+
 
     useEffect(() => {
-        const loadData = async () => {
 
+        const loadUserData = async () => {
             dbUsers
                 .onSnapshot(
                     querySnapshot => {
@@ -23,30 +23,34 @@ const Perfil = (props) => {
                             const { id, nome, pontos, genero, dataNascimento } = doc.data()
                             if (id == firebase.auth().currentUser.email) {
                                 userListAux.push({
-                                    key: doc.id,
-                                    value: nome,
+                                    id,
+                                    nome,
                                     pontos,
+                                    genero,
+                                    dataNascimento
                                 })
-
                             }
                         })
                         setUserList(userListAux)
                     }
                 )
         };
-        loadData();
+
+
+        loadUserData();
 
     }, [])
 
 
 
     const navigation = useNavigation()
-    
+
     return (
         <View style={styles.main}>
             <NavBar
                 showBack={true}
                 showMenu={true} />
+            {userList[0] &&<Text> {userList[0].nome}</Text>}
         </View>
     )
 }
