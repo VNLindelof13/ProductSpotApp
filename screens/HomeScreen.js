@@ -4,16 +4,18 @@ import { firebase } from '../firebase'
 import { useNavigation } from '@react-navigation/native'
 import NavBar from '../components/NavBar'
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 const HomeScreen = () => {
   const [mapFocused, setMapFocused] = useState(true)
-  const [mapRef, updateMapRef] = useState(null)
   const navigation = useNavigation()
   const [marketList, setMarketList] = useState([])
   const [marketListFiltered, setMarketListFiltered] = useState(marketList)
   const db = firebase.firestore().collection('market')
 
+
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
 
 
   const handleClick = () => {
@@ -22,6 +24,7 @@ const HomeScreen = () => {
 
 
   useEffect(() => {
+
     const loadData = async () => {
       db
         .onSnapshot(
@@ -102,7 +105,7 @@ const HomeScreen = () => {
         </View>
         {mapFocused ?
           (<View style={styles.mapBox}>
-           { <MapView 
+            {<MapView
               style={styles.mapStyles}
               initialRegion={{
                 latitude: 38.7223,
@@ -110,7 +113,13 @@ const HomeScreen = () => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               }}
-            />}
+            ><Marker
+                coordinate={{ latitude: 38.7223, longitude: -9.1397 }}
+                title={'Marker Title'}
+                description={'Marker Description'}
+                onClick={() => console.log("sf")}
+              />
+            </MapView>}
           </View>)
           :
           (<View style={styles.marketList}>
