@@ -12,10 +12,19 @@ const HomeScreen = () => {
   const [marketList, setMarketList] = useState([])
   const [marketListFiltered, setMarketListFiltered] = useState(marketList)
   const db = firebase.firestore().collection('market')
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
 
 
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+
+
+  const handleMapPress = (event) => {
+    const { latitude, longitude } = event.nativeEvent.coordinate;
+    setSelectedLocation({ latitude, longitude });
+    console.log(selectedLocation)
+  };
 
 
   const handleClick = () => {
@@ -31,12 +40,14 @@ const HomeScreen = () => {
           querySnapshot => {
             const marketList = []
             querySnapshot.forEach((doc) => {
-              const { name, location, corridors } = doc.data()
+              const { name, location, corridors, latitude, longitude } = doc.data()
               marketList.push({
                 id: doc.id,
                 name,
                 location,
-                corridors,
+                corridors, 
+                latitude, 
+                longitude,
               })
             })
             setMarketList(marketList)
@@ -69,6 +80,10 @@ const HomeScreen = () => {
   const handleClick2 = (item) => {
     const test = []
     navigation.navigate('SupermarketDetails', { item, test })
+  }
+
+  const clickMarker = (marker) => {
+    console.log (marker.name)
   }
 
   return (
@@ -107,18 +122,31 @@ const HomeScreen = () => {
           (<View style={styles.mapBox}>
             {<MapView
               style={styles.mapStyles}
+              onPress={handleMapPress}
               initialRegion={{
                 latitude: 38.7223,
                 longitude: -9.1393,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               }}
-            ><Marker
-                coordinate={{ latitude: 38.7223, longitude: -9.1397 }}
-                title={'Marker Title'}
-                description={'Marker Description'}
-                onClick={() => console.log("sf")}
+            >
+              {marketListFiltered.map((marker) => (
+              <Marker
+                key={marker.id}
+                onPress={()=>handleClick2(marker)}
+                coordinate={{
+                  latitude: marker.latitude,
+                  longitude: marker.longitude,
+                }}
               />
+            ))}
+              
+              {/* <Marker
+                coordinate={{ latitude: 38.7223, longitude: -9.1397 }}
+                title={'Pingo Doce Saldanha'}
+                description={'Carregue no marcador para aceder'}
+                onPress={clickMarker}
+              /> */}
             </MapView>}
           </View>)
           :

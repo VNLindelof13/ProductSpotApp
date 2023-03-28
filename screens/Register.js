@@ -33,7 +33,7 @@ const Register = () => {
         const currentDate = selectedDate;
         setShow(Platform.OS === 'ios');
         setDataNascimento(currentDate)
-        setFDate( dataNascimento.getDay() + '/' + dataNascimento.getMonth() + '/' + dataNascimento.getFullYear())
+        setFDate( selectedDate.getDate() + '/' + (parseInt(selectedDate.getMonth()) + 1) + '/' + dataNascimento.getFullYear())
     }
 
     const showMode = () => {
@@ -53,8 +53,7 @@ const Register = () => {
             .createUserWithEmailAndPassword(email, password)
             .then(userCredentials => {
                 const user = userCredentials.user;
-                console.log('Registered with ' + user.email);
-                navigation.replace("Login")
+                navigation.goBack()
             })
             .catch(error => alert(error.message))
     }

@@ -14,6 +14,7 @@ import Gamification from '../screens/Gamification';
 import HomeSupermarket from '../screens/HomeSupermarket';
 import Perfil from '../screens/Perfil';
 import MenuSupermarket from '../screens/MenuSupermarket';
+import EditPerfil from '../screens/EditPerfil';
 
 const Stack = createNativeStackNavigator();
 function AuthenticationStack()  {
@@ -87,6 +88,11 @@ function AuthenticationStack()  {
         options = {{headerShown:  false}} 
         name="Perfil" 
         component={Perfil} 
+        />
+        <Stack.Screen 
+        options = {{headerShown:  false}} 
+        name="EditPerfil" 
+        component={EditPerfil} 
         />
       </Stack.Navigator>
   )

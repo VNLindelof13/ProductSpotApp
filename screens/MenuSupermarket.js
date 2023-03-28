@@ -14,12 +14,6 @@ const MenuSupermarket = () => {
         navigation.navigate("Perfil")
     }
 
-    const handleMarketList = () => {
-        navigation.popToTop()
-    }
-    const handleGammification = () => {
-        navigation.navigate("Gamification")
-    }
     const handleLogout = () => {
         auth
             .signOut()
@@ -28,6 +22,7 @@ const MenuSupermarket = () => {
             })
             .catch(error => alert(error.message))
     }
+    
     return (
         <View>
             <NavBar

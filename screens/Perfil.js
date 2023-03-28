@@ -14,7 +14,7 @@ const Perfil = (props) => {
 
 
     const getGenero = (genero) => {
-        switch (genero) {
+        switch (parseInt(genero)) {
             case 1:
                 return (
                     <View>
@@ -99,6 +99,13 @@ const Perfil = (props) => {
                 {userList[0] && getGenero(userList[0].genero)}
                 <Text>{"\n"}Data de Nascimento:</Text>
                 {userList[0] && <Text>{getDataNascimento((userList[0]).dataNascimento)}{"\n"}</Text>}
+                <TouchableOpacity
+                    onPress={() => navigation.navigate("EditPerfil")}
+                    style={styles.buttonHeader}>
+                    <Text style={styles.editButton}>
+                        Editar Perfil
+                    </Text>
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -120,4 +127,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+
+    editButton: {
+        backgroundColor: 'green',
+        paddingHorizontal: 50,
+        paddingVertical: 5,
+        borderRadius: 7,
+        color: 'white'
+    }
 })
