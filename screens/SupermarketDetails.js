@@ -4,7 +4,6 @@ import NavBar from '../components/NavBar'
 import firebase from 'firebase'
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import { useNavigation } from '@react-navigation/native';
-import Icon2 from 'react-native-vector-icons/AntDesign';
 import { SelectList } from 'react-native-dropdown-select-list'
 
 
@@ -53,34 +52,7 @@ const SupermarketDetails = (props) => {
 
     useEffect(() => {
         const loadData = async () => {
-            db
-                .onSnapshot(
-                    querySnapshot => {
-                        const productListAux = []
-                        querySnapshot.forEach((doc) => {
-                            const { name, location, supermarketID, rating, usersValidated, category } = doc.data()
-                            if (supermarketInfo.id === supermarketID) {
-                                productListAux.push({
-                                    id: doc.id,
-                                    name,
-                                    location,
-                                    supermarketID,
-                                    rating,
-                                    usersValidated,
-                                    category,
-                                })
-
-                            }
-                        })
-                        productListAux.sort(function (a, b) {
-                            if (a.rating > b.rating) return -1;
-                            if (a.rating < b.rating) return 1;
-                            if (a.rating = b.rating) return 0;
-                        })
-                        setProductList(productListAux)
-                        setFilteredProductList(productListAux)
-                    }
-                )
+            
             dbCategory
                 .onSnapshot(
                     querySnapshot => {
@@ -98,33 +70,6 @@ const SupermarketDetails = (props) => {
         };
         loadData();
 
-    }, [])
-
-    const onClickFilterItem = () => {
-        navigation.navigate('SupermarketFilter', { supermarketInfo })
-    }
-
-    useEffect(() => {
-        const loadData = async () => {
-            dbCategory
-                .onSnapshot(
-                    querySnapshot => {
-                        const categoryListAux = []
-                        querySnapshot.forEach((doc) => {
-                            const { id, name } = doc.data()
-                            categoryListAux.push({
-                                key: id,
-                                value: name
-                            })
-                        })
-                        setCategoryList(categoryListAux)
-                    }
-                )
-                
-                
-        };
-        loadData();
-       
     }, [])
 
     return (
@@ -163,14 +108,14 @@ const SupermarketDetails = (props) => {
                 </View>
                 <View style={styles.list}>
                     <FlatList
-                        data={filteredProductList}
+                        data={supermarketInfo.corridors}
                         renderItem={({ item }) => (
                             <TouchableOpacity
                                 style={styles.itemContainer}
-                                onPress={() => navigation.navigate('ProductDetails', { item })}
+                                onPress={() => navigation.navigate('CorridorDetails', { item, supermarketInfo })}
                             >
-                                <Text> {item.name}</Text>
-                                <Text> Corredor {item.location}</Text>
+                                {/* <Text> {item.name}</Text> */}
+                                <Text> Corredor {item}</Text>
                             </TouchableOpacity>
                         )} />
                 </View>
@@ -235,6 +180,7 @@ const styles = StyleSheet.create({
         width: '95%',
         alignSelf: 'center',
         marginVertical: 4,
+        alignItems:'center'
     },
 
     addProductButton: {
