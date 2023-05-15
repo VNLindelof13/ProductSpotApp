@@ -73,12 +73,18 @@ const HomeScreen = () => {
     }
   }
 
+  const loadPins = () => {
+
+  }
 
   const handleClick2 = (item) => {
     const test = []
     navigation.navigate('SupermarketDetails', { item, test })
   }
 
+  const clickMarker = (marker) => {
+    console.log (marker.name)
+  }
 
   return (
     <View style={styles.main}>

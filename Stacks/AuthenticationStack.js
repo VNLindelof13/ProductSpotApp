@@ -15,7 +15,6 @@ import HomeSupermarket from '../screens/HomeSupermarket';
 import Perfil from '../screens/Perfil';
 import MenuSupermarket from '../screens/MenuSupermarket';
 import EditPerfil from '../screens/EditPerfil';
-import CorridorDetails from '../screens/CorridorDetails';
 
 const Stack = createNativeStackNavigator();
 function AuthenticationStack()  {
@@ -94,11 +93,6 @@ function AuthenticationStack()  {
         options = {{headerShown:  false}} 
         name="EditPerfil" 
         component={EditPerfil} 
-        />
-        <Stack.Screen 
-        options = {{headerShown:  false}} 
-        name="CorridorDetails" 
-        component={CorridorDetails} 
         />
       </Stack.Navigator>
   )
