@@ -25,15 +25,15 @@ const CorridorDetails = (props) => {
                     querySnapshot => {
                         const productListAux = []
                         querySnapshot.forEach((doc) => {
-                            const { name, location, supermarketID, rating, usersValidated, category } = doc.data()
+                            const { name, location, supermarketID, rating, usersValidated, userView, category } = doc.data()
                             if ((supermarketInfo === supermarketID) && location == corridorInfo ) {
-                                console.log("HERE")
                                 productListAux.push({
                                     id: doc.id,
                                     name,
                                     location,
                                     supermarketID,
                                     rating,
+                                    userView,
                                     usersValidated,
                                     category,
                                 })
@@ -53,9 +53,20 @@ const CorridorDetails = (props) => {
         loadData()
     }, [])
 
-
-
-    return (
+    const handleProductClick = (item) => {
+        const userEmail = firebase.auth().currentUser.email;
+        const currentDate = new Date().toLocaleDateString();
+        const timestamp = firebase.firestore.Timestamp.fromDate(new Date(currentDate));
+        db.doc(item.id).get().then((doc) => {
+          const userView = doc.data().userView || [];
+          const updatedUserView = [...userView, { email: userEmail, timestamp }];          
+          db.doc(item.id).update({
+            userView: updatedUserView
+          });
+        });        
+        navigation.navigate('ProductDetails', { item });
+      };
+      return (
         <View style={styles.main}>
             <NavBar
                 showMenu={true}
@@ -66,10 +77,10 @@ const CorridorDetails = (props) => {
                         renderItem={({ item }) => (
                             <TouchableOpacity
                                 style={styles.itemContainer}
-                                onPress={() => navigation.navigate('ProductDetails', { item })}
+                                onPress={() => handleProductClick(item)}
                             >
                                 {/* <Text> {item.name}</Text> */}
-                                <Text> Corredor {item.name}</Text>
+                                <Text>{item.name}</Text>
                             </TouchableOpacity>
                         )} />
         </View>

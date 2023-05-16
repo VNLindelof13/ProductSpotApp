@@ -16,6 +16,8 @@ import Perfil from '../screens/Perfil';
 import MenuSupermarket from '../screens/MenuSupermarket';
 import EditPerfil from '../screens/EditPerfil';
 import CorridorDetails from '../screens/CorridorDetails';
+import ViewsByProduct from '../screens/ViewsByProduct'
+import ViewsBySupermarket from '../screens/ViewsBySupermarket';
 
 const Stack = createNativeStackNavigator();
 function AuthenticationStack()  {
@@ -99,6 +101,16 @@ function AuthenticationStack()  {
         options = {{headerShown:  false}} 
         name="CorridorDetails" 
         component={CorridorDetails} 
+        />
+        <Stack.Screen 
+        options = {{headerShown:  false}} 
+        name="ViewsByProduct" 
+        component={ViewsByProduct} 
+        />
+        <Stack.Screen 
+        options = {{headerShown:  false}} 
+        name="ViewsBySupermarket" 
+        component={ViewsBySupermarket} 
         />
       </Stack.Navigator>
   )
