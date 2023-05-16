@@ -21,15 +21,11 @@ const HomeSupermarket = () => {
       <NavBar
         showMenuSupermarket={true}
       />
-      <View style={{ paddingVertical: 200, flex: 1, justifyContent: 'space-evenly', alignItems: 'center' }}>
-        <Button
-          title="Ver Visualizações por Produto"
-          color='#26972A'
-          onPress={handleNavigateToViewsByProductPage} />
-        <Button
-          title="Ver Visualizações Totais"
-          color='#26972A'
-          onPress={handleNavigateToViewsBySupermarketPage} />
+      <View>
+        <Button title="Ver Visualizações por Produto" onPress={handleNavigateToViewsByProductPage} />
+      </View>
+      <View>
+        <Button title="Ver Visualizações Totais" onPress={handleNavigateToViewsBySupermarketPage} />
       </View>
     </View>
   );
