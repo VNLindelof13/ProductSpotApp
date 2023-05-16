@@ -136,13 +136,13 @@ const ViewsByProduct = () => {
                         width={300}
                         height={220}
                         chartConfig={{
-                            backgroundColor: '#26972A',
-                            backgroundGradientFrom: '#26972A',
-                            backgroundGradientTo: '#26972A',
+                            backgroundColor: '#e26a00',
+                            backgroundGradientFrom: '#fb8c00',
+                            backgroundGradientTo: '#ffa726',
                             decimalPlaces: 0,
                             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                             style: {
-                                borderRadius: 50,
+                                borderRadius: 16,
                             },
                             barPercentage: 0.3,
 
@@ -177,8 +177,6 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
     chartContainer: {
-        overflow: 'hidden',
-        borderRadius: 16,
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
