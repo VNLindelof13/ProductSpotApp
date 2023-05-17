@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { firebase } from '../firebase';
-import { Picker } from '@react-native-picker/picker';
-import NavBar from '../components/NavBar'
+import { SelectList } from 'react-native-dropdown-select-list'
+import NavBar from '../components/NavBar';
 import moment from 'moment';
 import { BarChart } from 'react-native-chart-kit';
 
 const ViewsByProduct = () => {
     const currentUser = firebase.auth().currentUser;
-    const [selectedItem, setSelectedItem] = useState('');
+    const [selectedItem, setSelectedItem] = useState(null);
     const [viewCounts, setViewCounts] = useState([]);
     const [itemList, setItemList] = useState([]);
+    const [itemNamesList, setItemNamesList] = useState([]);
 
     useEffect(() => {
         const fetchItemList = async () => {
             try {
                 let adminID;
 
-                const userSnapshot = await firebase
-                    .firestore()
+                const userSnapshot = await firebase.firestore()
                     .collection('users')
                     .where('id', '==', currentUser.email)
                     .limit(1)
@@ -30,14 +30,15 @@ const ViewsByProduct = () => {
                 }
 
                 if (adminID) {
-                    const itemSnapshot = await firebase
-                        .firestore()
+                    const itemSnapshot = await firebase.firestore()
                         .collection('products')
                         .where('supermarketID', '==', adminID)
                         .get();
 
                     const items = itemSnapshot.docs.map((doc) => doc.data());
-                    setItemList(items);
+                    const itemsNames = itemSnapshot.docs.map((doc) => doc.data().name);
+                    setItemList(items)
+                    setItemNamesList(itemsNames);
                 }
             } catch (error) {
                 console.log('Error fetching item list:', error);
@@ -47,13 +48,11 @@ const ViewsByProduct = () => {
         fetchItemList();
     }, []);
 
-
     useEffect(() => {
         const fetchViewCounts = async () => {
             try {
                 if (selectedItem && selectedItem.name) {
-                    const viewSnapshot = await firebase
-                        .firestore()
+                    const viewSnapshot = await firebase.firestore()
                         .collection('products')
                         .where('name', '==', selectedItem.name)
                         .get();
@@ -100,56 +99,56 @@ const ViewsByProduct = () => {
 
         fetchViewCounts();
     }, [selectedItem]);
+
+    const handleSelector = (itemName) => {
+        setSelectedItem(itemList.find(item => item.name == itemName))
+    }
     return (
         <View style={styles.container}>
-            <NavBar
-                showMenuSupermarket={true}
-                showBack={true}
-            />
+            <NavBar showMenuSupermarket={true} showBack={true} />
             <View style={styles.dropdownContainer}>
-                <Picker
-                    style={styles.dropdown}
-                    selectedValue={selectedItem ? selectedItem.id : ''}
-                    onValueChange={(itemValue) => {
-                        const item = itemList.find((item) => item.id === itemValue);
-                        setSelectedItem(item || null);
-                    }}
-                >
-                    <Picker.Item label="Seleção Vazia" value="" />
-                    {itemList.map((item) => (
-                        <Picker.Item key={item.id} label={item.name} value={item.id} />
-                    ))}
-                </Picker>
-
+                <SelectList
+                    data={itemNamesList}
+                    setSelected={handleSelector}
+                    boxStyles={styles.inputBox}
+                    boxTextStyles={styles.inputBoxText}
+                    dropdownStyles={styles.input}
+                    dropdownItemStyles={styles.dropdownItem}
+                />
             </View>
             <View style={styles.chartContainer}>
                 {selectedItem ? (
+                    <View style={{alignItems:'center'}}>
+                    <Text style={{fontSize:20,marginBottom:10,color:'#26972A'}}>Views by Product: {selectedItem.name}</Text>
                     <BarChart
                         data={{
                             labels: viewCounts.map(({ month }) => month),
                             datasets: [
                                 {
-                                    data: viewCounts.map(({ count }) => count),
+                                    data: viewCounts.map
+                                        (({ count }) => count),
                                 },
                             ],
                         }}
-                        width={300}
-                        height={220}
+                        width={380}
+                        height={200}
                         chartConfig={{
-                            backgroundColor: '#e26a00',
-                            backgroundGradientFrom: '#fb8c00',
-                            backgroundGradientTo: '#ffa726',
+                            backgroundColor: '#26972A',
+                            backgroundGradientFrom: '#26972A',
+                            backgroundGradientTo: '#26972A',
                             decimalPlaces: 0,
                             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                             style: {
                                 borderRadius: 16,
                             },
                             barPercentage: 0.3,
-
                         }}
                     />
-                ) : (
-                    <Text style={styles.message}>Escolha o produto para ver as visualizações por mês.</Text>
+                </View>
+                )  : (
+                    <Text style={styles.message}>
+                        Escolha o produto para ver as visualizações por mês.
+                    </Text>
                 )}
             </View>
         </View>
@@ -163,18 +162,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     dropdownContainer: {
+        marginTop:10,
         marginBottom: 16,
-    },
-    label: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 8,
-    },
-    dropdown: {
-        height: 40,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 4,
     },
     chartContainer: {
         flex: 1,

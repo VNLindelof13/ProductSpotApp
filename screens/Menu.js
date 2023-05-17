@@ -15,7 +15,7 @@ const Menu = () => {
     }
 
     const handleMarketList  = () => {
-        navigation.popToTop()
+        navigation.replace('Home')
     }
     const handleGammification  = () => {
         navigation.navigate("Gamification")

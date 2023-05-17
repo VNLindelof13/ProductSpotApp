@@ -21,11 +21,13 @@ const HomeSupermarket = () => {
       <NavBar
         showMenuSupermarket={true}
       />
-      <View>
-        <Button title="Ver Visualizações por Produto" onPress={handleNavigateToViewsByProductPage} />
-      </View>
-      <View>
-        <Button title="Ver Visualizações Totais" onPress={handleNavigateToViewsBySupermarketPage} />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-evenly', marginVertical: 150 }}>
+        <TouchableOpacity style={styles.button} onPress={handleNavigateToViewsByProductPage}>
+          <Text style={styles.buttonText}>Ver Visualizações por Produto</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleNavigateToViewsBySupermarketPage}>
+          <Text style={styles.buttonText}>Ver Visualizações Totais</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -45,6 +47,17 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 10,
     marginTop: '30%',
-
+  },
+  button: {
+    backgroundColor: '#26972A',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });

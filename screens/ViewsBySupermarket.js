@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, View, useWindowDimensions } from 'react-native'
+import { StyleSheet, ScrollView, View, useWindowDimensions, Text } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { firebase } from '../firebase'
 import { useNavigation } from '@react-navigation/native'
@@ -11,6 +11,7 @@ const ViewsBySupermarket = () => {
     const [userViewCounts, setUserViewCounts] = useState([]);
     const windowWidth = useWindowDimensions().width;
     const navigation = useNavigation()
+    const [adminName, setAdminName] = useState('')
 
 
 
@@ -25,6 +26,7 @@ const ViewsBySupermarket = () => {
                     .get();
                 if (!userSnapshot.empty) {
                     const adminID = userSnapshot.docs[0].data().adminID;
+                    setAdminName(userSnapshot.docs[0].data().nome)
 
                     const productSnapshot = await firebase
                         .firestore()
@@ -76,6 +78,8 @@ const ViewsBySupermarket = () => {
             />
             <ScrollView horizontal>
                 <View style={styles.chartContainer}>
+                <Text style={{fontSize:20,marginBottom:10,color:'#26972A'}}>Total views: {adminName}</Text>
+
                     <BarChart
                         data={{
                             labels: userViewCounts.map(([month]) => month),
@@ -127,7 +131,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '100%',
         paddingHorizontal: 10,
-        marginTop: '30%',
 
     },
 });
