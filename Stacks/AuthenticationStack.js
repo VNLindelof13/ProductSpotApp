@@ -19,6 +19,7 @@ import CorridorDetails from '../screens/CorridorDetails';
 import ViewsByProduct from '../screens/ViewsByProduct'
 import ViewsBySupermarket from '../screens/ViewsBySupermarket';
 import TotalViewsByProduct from '../screens/TotalViewsByProduct';
+import StockOutGraph from '../screens/StockOutGraph';
 
 const Stack = createNativeStackNavigator();
 function AuthenticationStack()  {
@@ -117,6 +118,11 @@ function AuthenticationStack()  {
         options = {{headerShown:  false}} 
         name="TotalViewsByProduct" 
         component={TotalViewsByProduct} 
+        />
+        <Stack.Screen 
+        options = {{headerShown:  false}} 
+        name="StockOutGraph" 
+        component={StockOutGraph} 
         />
       </Stack.Navigator>
   )

@@ -113,7 +113,6 @@ const ViewsByProduct = () => {
         };
 
         fetchViewCounts();
-        console.log(viewCounts)
     }, [selectedItem]);
 
 
@@ -165,7 +164,7 @@ const ViewsByProduct = () => {
                                 bezier
                             />
                         ) : (
-                            <Text style={styles.message}>A carregar gráfico</Text>
+                            <Text style={styles.message}>A carregar gráfico...</Text>
                         )}
                         <Text style={{ fontSize: 18, marginTop: 10 }}>
                             Total Views: {totalViews}

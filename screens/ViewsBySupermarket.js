@@ -76,7 +76,6 @@ const ViewsBySupermarket = () => {
                 showBack={true}
 
             />
-            <ScrollView horizontal>
                 <View style={styles.chartContainer}>
                 <Text style={{fontSize:20,marginBottom:10,color:'#26972A'}}>Total views: {adminName}</Text>
 
@@ -89,7 +88,7 @@ const ViewsBySupermarket = () => {
                                 },
                             ],
                         }}
-                        width={windowWidth}
+                        width={380}
                         height={220}
                         chartConfig={{
                             backgroundColor: '#26972A',
@@ -113,7 +112,6 @@ const ViewsBySupermarket = () => {
                         }}
                     />
                 </View>
-            </ScrollView>
         </View>
     );
 }

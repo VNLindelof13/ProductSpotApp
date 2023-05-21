@@ -19,6 +19,9 @@ const HomeSupermarket = () => {
   const handleNavigateToTotalViewsByProductPage = () => {
     navigation.navigate('TotalViewsByProduct');
   };
+  const handleNavigateToStockOutGraphPage = () => {
+    navigation.navigate('StockOutGraph');
+  };
   return (
     <View style={styles.main}>
       <NavBar
@@ -33,6 +36,9 @@ const HomeSupermarket = () => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleNavigateToTotalViewsByProductPage}>
           <Text style={styles.buttonText}>Ver Evolução Visualizações</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleNavigateToStockOutGraphPage}>
+          <Text style={styles.buttonText}>Ver Evolução Roturas de Stock</Text>
         </TouchableOpacity>
       </View>
     </View>

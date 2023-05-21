@@ -88,15 +88,7 @@ const SupermarketDetails = (props) => {
                     <TextInput
                         placeholder="Pesquisar supermercado... "
                         style={styles.searchBar}
-                        onChangeText={searchFilter} />
-                    {/* <TouchableOpacity onPress={onClickFilterItem}>
-                        <Icon2
-                            style={styles.filterIcon}
-                            name='filter'
-                            color='#000'
-                            size={20}
-                        />
-                    </TouchableOpacity> */}
+                        onChangeText={searchFilter} />                    
                     <SelectList
                         data={categoryList}
                         setSelected={categoryFilter}

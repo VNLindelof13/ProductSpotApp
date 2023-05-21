@@ -10,6 +10,7 @@ const ProductDetails = (props) => {
     const navigation = useNavigation()
     const db = firebase.firestore().collection('products')
     const [hasValidated, setHasValidated] = useState(productInfo.usersValidated.includes(firebase.auth().currentUser.email))
+    const [isAvailable, setIsAvailable] = useState(productInfo.isStockAvailable)
     const [isNegative, setIsNegative] = useState(productInfo.rating < 0)
     const [userList, setUserList] = useState([])
     const dbUsers = firebase.firestore().collection('users')
@@ -20,30 +21,31 @@ const ProductDetails = (props) => {
         setIsNegative(!(productInfo.rating + a))
         dbUsers.doc(userList[0].key).update({ pontos: userList[0].pontos + validationPoints })
     }
-    
+
+
 
     useEffect(() => {
-        const loadData = async () => {            
-                dbUsers
+        const loadData = async () => {
+            dbUsers
                 .onSnapshot(
                     querySnapshot => {
                         const userListAux = []
                         querySnapshot.forEach((doc) => {
-                            const { id, nome, pontos} = doc.data()
-                            if(id == firebase.auth().currentUser.email){
-                            userListAux.push({
-                                key: doc.id,
-                                value: nome,
-                                pontos,
-                            })
-                           
-                        }
+                            const { id, nome, pontos } = doc.data()
+                            if (id == firebase.auth().currentUser.email) {
+                                userListAux.push({
+                                    key: doc.id,
+                                    value: nome,
+                                    pontos,
+                                })
+
+                            }
                         })
                         setUserList(userListAux)
                     }
                 )
         };
-        loadData();       
+        loadData();
     }, [])
 
     const verifyAlert = () => {
@@ -60,8 +62,31 @@ const ProductDetails = (props) => {
             ]
         );
     }
+    const updateStockAvailability = (isAvailable) => {
+        const currentDate = new Date().toISOString();
+        const timestamp = firebase.firestore.Timestamp.fromDate(new Date(currentDate));
+        const userEmail = firebase.auth().currentUser.email;
 
+        db.doc(productInfo.id).get().then((doc) => {
+            const stockOutDates = doc.data().stockOutDates || [];
+            if (doc.data().isStockAvailable) {
+                const updatedStockOutDates = [...stockOutDates, { email: userEmail, timestamp }];
+                db.doc(productInfo.id).update({
+                    stockOutDates: updatedStockOutDates,
+                });
+                db.doc(productInfo.id).update({
+                    isStockAvailable: false,
+                })
+                setIsAvailable(doc.data().isStockAvailable);
+            } else {
+                db.doc(productInfo.id).update({
+                    isStockAvailable: true,
+                })
+                setIsAvailable(doc.data().isStockAvailable);
+            }
+        })
 
+    };
 
     return (
         <View style={styles.main}>
@@ -83,6 +108,19 @@ const ProductDetails = (props) => {
                     </TouchableOpacity>}
                 </View>
 
+                {!isAvailable && <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => updateStockAvailability(false)}
+                >
+                    <Text style={styles.buttonText}>Stock não se encontra disponível?</Text>
+                </TouchableOpacity>}
+                {isAvailable && <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => updateStockAvailability(true)}
+                >
+                    <Text style={styles.buttonText}>Stock já se encontra disponível?</Text>
+                </TouchableOpacity>}
+
             </View>
         </View>
     )
@@ -102,12 +140,15 @@ const styles = StyleSheet.create({
     buttonContainer: {
         width: "60%",
         marginTop: 10,
+        alignItems: 'center'
     },
     button: {
         backgroundColor: '#26972A',
         paddingVertical: 10,
         borderRadius: 10,
         alignItems: 'center',
+        marginVertical: 10,
+        width: "70%"
     },
     buttonText: {
         color: 'white',
@@ -135,6 +176,6 @@ const styles = StyleSheet.create({
     nameContainer: {
         width: '100%',
         alignItems: 'center',
-        textAlign:'center',
+        textAlign: 'center',
     },
 })

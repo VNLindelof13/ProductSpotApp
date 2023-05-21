@@ -130,7 +130,7 @@ const ViewsByProduct = () => {
                                 },
                             ],
                         }}
-                        width={380}
+                        width={360}
                         height={200}
                         chartConfig={{
                             backgroundColor: '#26972A',
@@ -158,7 +158,6 @@ const ViewsByProduct = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
         backgroundColor: '#fff',
     },
     dropdownContainer: {
